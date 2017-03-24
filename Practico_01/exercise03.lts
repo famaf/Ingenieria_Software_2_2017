@@ -1,0 +1,33 @@
+MEETING = (hello -> converse -> goodbye -> STOP).
+
+JOB = (arrive -> work -> leave -> JOB).
+
+// FOURTICK = (tick -> tick -> tick -> tick -> STOP).
+FOURTICK(N = 4) = STATE_TMP[0],
+STATE_TMP[i:0..N] = (when(i<N) tick -> STATE_TMP[i+1]).
+// ||F = FOURTICK() #Esto es para pasarle el parametro N
+// o
+// ||F = FOURTICK. #Esto es para NO pasarle el parametro N
+
+GAME = ( {one,two} -> WIN
+         | three -> LOSE
+       ),
+WIN = (win  -> GAME).
+LOSE = (lose -> GAME),
+
+//#Este no anda
+//GAME01 = ( {one,two} -> win -> GAME01
+//         | three -> lose -> GAME01
+//).
+
+FAULTY = ( {red, blue, green} -> FAULTY
+         | yellow -> candy -> FAULTY
+         ).
+
+DOUBLE = ( in[i:1..3] -> out[i] -> DOUBLE).
+
+PERSON = ( weekend -> sleep -> ( play -> PERSON
+                               | shop -> PERSON
+                               )
+         | weekend -> sleep -> work -> PERSON
+         ).

@@ -1,0 +1,48 @@
+ONESHOT = (once -> STOP).
+
+SWITCH = OFF,
+OFF = (on -> ON),
+ON = (off -> OFF).
+
+DRINKS = ( red -> coffee -> DRINKS
+         | blue -> tea -> DRINKS
+         ).
+
+
+COIN = ( toss -> heads -> COIN
+       | toss -> tails -> COIN
+       ).
+
+
+COIN2 = ( toss -> (heads -> COIN2
+                  | tails -> COIN2
+                  )
+        ).
+
+
+BUFF = (in[i:0..3] -> out[i] -> BUFF).
+
+
+BUFF2 = ( in[0] -> out[0] -> BUFF2
+        | in[1] -> out[1] -> BUFF2
+        | in[2] -> out[2] -> BUFF2
+        | in[3] -> out[3] -> BUFF2
+        ).
+
+
+const N = 1
+range T = 0..N
+range R = 0..2*N
+SUM = (in[a:T][b:T] -> TOTAL[a+b]),
+TOTAL[s:R] = (out[s] -> SUM).
+
+
+COUNT(N = 3) = COUNT[0],
+COUNT[i:0..N] = ( when(i < N) inc -> COUNT[i+1]
+                | when(i > 0) inc -> COUNT[i-1]
+                ).
+
+
+MAKER = (made -> ready -> MAKER).
+USER = (ready -> use -> USER).
+||MAKER_USER = (MAKER || USER).
