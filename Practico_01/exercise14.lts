@@ -1,0 +1,23 @@
+//Cinta Transportadora
+CONVEYER_BELT = ({object_A, object_B, object_C, object_D} -> CONVEYER_BELT).
+
+// Brazo Mecanico de seleccion
+ARM_PRESS_DRILL = (object_A -> press -> free_arm -> ARM_PRESS_DRILL
+                  |object_B -> drill -> free_arm -> ARM_PRESS_DRILL
+                  |object_C -> press -> drill -> free_arm -> ARM_PRESS_DRILL
+                  |object_D -> drill -> press -> free_arm -> ARM_PRESS_DRILL
+                  ).
+
+//Prensa
+PRESS = (press -> PRESS).
+
+//Taladro
+DRILL = (drill -> DRILL).
+
+// Brazo Mecanico para la salida
+ARM_FREE = (press -> ARM_FREE
+           |drill -> ARM_FREE
+           ).
+
+//Fabrica
+||FACTORY = (CONVEYER_BELT || ARM_PRESS_DRILL || PRESS || DRILL || ARM_FREE).

@@ -1,0 +1,6 @@
+BISTABLE = (trigger -> [1] -> trigger -> [0] -> BISTABLE).
+
+// Otra Version
+BISTABLE_2 = ONE,
+ONE = (trigger -> [1] -> ZERO),
+ZERO = (trigger -> [0] -> ONE).

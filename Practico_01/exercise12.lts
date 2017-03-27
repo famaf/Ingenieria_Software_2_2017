@@ -1,0 +1,14 @@
+//Cinta Transportadora
+CONVEYER_BELT = (object_A -> CONVEYER_BELT).
+
+// Brazo Mecanico para el prensado
+ARM_PRESS = (object_A -> press -> free_arm -> ARM_PRESS).
+
+//Prensa
+PRESS = (press -> PRESS).
+
+// Brazo Mecanico para la salida
+ARM_FREE = (press -> ARM_FREE). // DUDA ACA
+
+//Fabrica
+||FACTORY = (CONVEYER_BELT || ARM_PRESS || PRESS || ARM_FREE).

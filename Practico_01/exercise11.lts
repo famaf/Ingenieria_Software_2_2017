@@ -1,0 +1,29 @@
+const N = 2 //Cantidad de personas
+range R = 0..N
+
+//Puerta del Este
+EAST = (entrance -> EAST).
+
+//Puerta del OESTE
+WEST = (exit -> WEST).
+
+//El Director abre y cierra
+DIRECTOR = (open -> close -> DIRECTOR).
+
+//Control de personas
+CONTROL = CONTROL[0], //Empezamos con 0 personas
+CONTROL[p:R] = (when(p==0) open -> OPENED[p] //Si personas = 0 ==> Abro puertas del Museo
+               |when(p>0) exit -> CONTROL[p-1]//Si personas > 0 ==> Pueden salir del Museo
+               ),
+
+//Manejo de entrada y salida de personas
+OPENED[p:R] = (close -> CONTROL[p] //Puedo cerrar las puertas del museo el Museo
+              |when(p<N) entrance -> OPENED[p+1] //Pueden ingresar personas
+              |when(p>0) exit -> OPENED[p-1] //Pueden salir personas
+              ).
+
+//Museo
+||MUSEUM = (EAST || WEST || DIRECTOR || CONTROL).
+
+
+

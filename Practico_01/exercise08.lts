@@ -1,0 +1,24 @@
+//Radio, prende y va a las estaciones
+RADIO_FM = (on -> FM),
+
+//Estaciones
+//Cuando prende se sintoniza en 108
+FM = FM[108],
+FM[f:88..108] = (off -> RADIO_FM
+                |reset -> RESET
+                |scan -> SCAN[f]
+                ),
+
+//Boton de Reset se sintoniza en 108
+RESET = (frec[108] -> FM[108]),
+
+//Boton de Scan
+//Cuando se presiona, busca estaciones bajando hasta la frecuencia mas baja (88)
+SCAN[f:88..108] = (when(f>88) buscando -> frec[f] -> SEARCH[f] //Mientras estemos arriba de 88 buscamos
+                  |when(f==88) low_frec -> frec[f] -> FM[88] //Estamos en la frecuencia mas baja
+                  ),
+
+//Busca estaciones que esten arriba de la 88
+SEARCH[f:89..108] = (yes_station -> FM[f] //Se encontro una estacion
+                    |no_station -> SCAN[f-1] //No se encontro una estacion ==> seguimos buscando
+                    ).
