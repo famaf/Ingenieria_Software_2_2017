@@ -5,13 +5,13 @@ DRINKS = MONEY[0],
 
 //MONEY es la cantidad de dinero que tiene la maquina
 //Vamos aceptando monedas hasta llegar a 15c
-MONEY[d:0..14] = (coin[5][d+5] -> MONEY[d+5]
-                 |coin[10][d+10] -> MONEY[d+10]
-                 |coin[20][d+20] -> MONEY[d+20]
+MONEY[d:0..14] = (coin[5] -> MONEY[d+5]
+                 |coin[10] -> MONEY[d+10]
+                 |coin[20] -> MONEY[d+20]
                  ),
 //Cuando llegamos o nos pasamos de los 15c entregamos
 //la Coca-Cola y entregamos el vuelto si es necesario
-MONEY[d:15..34] = (coca_cola[15][d-15] -> CHANGE[d-15]),
+MONEY[d:15..34] = (coca_cola[15] -> CHANGE[d-15]),
 
 //Es el vuelto que se tiene que entregar pueden ser
 //monedas de 5c, 10c, 20c (Este ultimo caso no se da)

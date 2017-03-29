@@ -1,24 +1,31 @@
+const MinBand = 88
+const MaxBand = 90
+
 //Radio, prende y va a las estaciones
 RADIO_FM = (on -> FM),
 
 //Estaciones
-//Cuando prende se sintoniza en 108
-FM = FM[108],
-FM[f:88..108] = (off -> RADIO_FM
-                |reset -> RESET
-                |scan -> SCAN[f]
-                ),
+//Cuando prende se sintoniza en MaxBand
+FM = FM[MaxBand],
+FM[f:MinBand..MaxBand] = (off -> RADIO_FM
+                         |reset -> FM[MaxBand]
+                         |scan -> SCAN[f]
+                         ),
 
-//Boton de Reset se sintoniza en 108
-RESET = (frec[108] -> FM[108]),
+//Boton de Reset se sintoniza en MaxBand
+//RESET = (frec[MaxBand] -> FM[MaxBand]),
 
 //Boton de Scan
-//Cuando se presiona, busca estaciones bajando hasta la frecuencia mas baja (88)
-SCAN[f:88..108] = (when(f>88) buscando -> frec[f] -> SEARCH[f] //Mientras estemos arriba de 88 buscamos
-                  |when(f==88) low_frec -> frec[f] -> FM[88] //Estamos en la frecuencia mas baja
-                  ),
+//Cuando se presiona, busca estaciones bajando hasta la frecuencia MinBand
+SCAN[f:MinBand..MaxBand] = (frec[f] -> if f>MinBand then
+                                           (yes_station -> FM[f] 
+                                           |no_station -> SCAN[f-1]) 
+                                       else
+                                           ({yes_station, no_station} -> FM[f])
+                           ).
 
-//Busca estaciones que esten arriba de la 88
-SEARCH[f:89..108] = (yes_station -> FM[f] //Se encontro una estacion
-                    |no_station -> SCAN[f-1] //No se encontro una estacion ==> seguimos buscando
-                    ).
+//Otra forma de hacer el Scan
+//SCAN[f:MinBand..MaxBand] = (frec[f] -> (when(f>MinBand) yes_station -> FM[f] 
+//                                       |when(f>MinBand) no_station -> SCAN[f-1]
+//                                       |when(f==MinBand) {yes_station, no_station} -> FM[f])
+//                           ).
