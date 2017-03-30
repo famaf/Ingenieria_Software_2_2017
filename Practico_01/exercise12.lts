@@ -1,3 +1,4 @@
+/*
 //Cinta Transportadora
 CONVEYER_BELT = (next -> object_A -> CONVEYER_BELT).
 
@@ -12,3 +13,23 @@ ARM_FREE = (press -> ARM_FREE). // DUDA ACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 
 //Fabrica
 ||FACTORY = (CONVEYER_BELT || ARM_PRESS || PRESS || ARM_FREE).
+*/
+
+const N = 3
+range R = 0..N
+
+CINTA = BUFFER[0],
+BUFFER[i:R] = (when(i<N) put -> BUFFER[i+1]
+              |when(i>0) get -> BUFFER[i-1]
+              ).
+
+//BRAZO_PRESS = (get -> release -> press -> BRAZO_PRESS).
+BRAZO_PRESS = (get -> drop_to_press -> BRAZO_PRESS).
+
+PRESS = (drop_to_press -> press -> finish_press -> BRAZO_PRESS).
+
+
+BRAZO_RELEASE = (finish_press -> release_brazo -> BRAZO_RELEASE).
+
+
+||FACTORY = (CINTA || BRAZO_PRESS || PRESS || BRAZO_RELEASE).

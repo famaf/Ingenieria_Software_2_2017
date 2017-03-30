@@ -1,0 +1,39 @@
+const N = 2 //Cantidad de personas
+range R = 0..N
+
+//Puerta del Este
+EAST = (unlock_east -> EAST_DOOR),
+EAST_DOOR = (arrive -> EAST_DOOR
+            |lock_east -> EAST
+            ).
+
+
+//Puerta del OESTE
+WEST = (unlock_west -> WEST_DOOR),
+WEST_DOOR = (exit -> WEST_DOOR
+            |lock_west -> WEST
+            ).
+
+//El Director abre y cierra el Museo
+DIRECTOR = (open_museum -> close_museum -> DIRECTOR).
+
+//Controlador de las puertas
+CONTROL = (open_museum -> OPEN_DOORS
+          |close_museum -> CLOSE_DOORS
+          ),
+OPEN_DOORS = (unlock_east -> unlock_west -> CONTROL),
+CLOSE_DOORS = (lock_east -> lock_west -> CONTROL).
+
+//Gente
+PEOPLE = PEOPLE[0],
+PEOPLE[p:R] = (when(p<N) arrive -> PEOPLE[p+1]
+              |when(p>0) exit -> PEOPLE[p-1]
+              |close_museum -> lock_east -> PEOPLE[0]
+              ).
+
+
+
+
+
+//Museo
+||MUSEUM = (EAST || DIRECTOR || CONTROL || PEOPLE || WEST).
