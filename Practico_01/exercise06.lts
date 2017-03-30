@@ -1,3 +1,25 @@
+
+const MIN_LEVEL = 0 //Nivel minimo de agua
+const MAX_LEVEL = 9 //Nivel maximo de agua
+range R = MIN_LEVEL..MAX_LEVEL //Rango de valores del nivel de agua
+
+const N = 5 //Nivel actual de agua
+
+WATER = WATER_LEVEL[N],
+WATER_LEVEL[l:R] = (when(l<MAX_LEVEL) up_level -> WATER_LEVEL[l+1]
+			       |when (l>MIN_LEVEL) down_level -> WATER_LEVEL[l-1]
+			       |level[l] -> WATER_LEVEL[l]
+                   ).
+
+SENSOR = (level[l:R] -> (when(l<2) bajo -> SENSOR
+                        |when(l>=2 && l<=8) normal -> SENSOR
+                        |when(l>8) alto -> SENSOR)
+         ).
+
+||TANK = (WATER || SENSOR).
+
+
+/*
 range R = 0..9 // Posibles niveles de agua
 
 //Sensor de nivel de agua del tanque
@@ -7,3 +29,4 @@ SENSOR[i:R] = (level[l:R] -> SENSOR[l] //El nivel del agua va aumentando y luego
               |when(i>=2 && i<=8) normal -> SENSOR[i] //Vemos si el valor del Sensor es Normal
               |when(i>8) alto -> SENSOR[i] //Vemos si el valor del Sensor es Alto
               ).
+*/

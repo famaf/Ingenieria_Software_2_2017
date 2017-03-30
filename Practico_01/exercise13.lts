@@ -1,5 +1,7 @@
 //Cinta Transportadora
-CONVEYER_BELT = ({object_A, object_B} -> CONVEYER_BELT).
+CONVEYER_BELT = (next -> object_A -> CONVEYER_BELT
+                |next -> object_B -> CONVEYER_BELT
+                ).
 
 // Brazo Mecanico de seleccion
 ARM_PRESS_DRILL = (object_A -> press -> free_arm -> ARM_PRESS_DRILL

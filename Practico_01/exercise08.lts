@@ -1,31 +1,31 @@
-const MinBand = 88
-const MaxBand = 90
+const MIN_BAND = 88
+const MAX_BAND = 90 // Para probarlo poner MAXBAND en 90 porque 108 es mucho
 
 //Radio, prende y va a las estaciones
 RADIO_FM = (on -> FM),
 
 //Estaciones
 //Cuando prende se sintoniza en MaxBand
-FM = FM[MaxBand],
-FM[f:MinBand..MaxBand] = (off -> RADIO_FM
-                         |reset -> FM[MaxBand]
-                         |scan -> SCAN[f]
-                         ),
+FM = FM[MAX_BAND],
+FM[f:MIN_BAND..MAX_BAND] = (off -> RADIO_FM
+                           |reset -> FM[MAX_BAND]
+                           |scan -> SCAN[f]
+                           ),
 
 //Boton de Reset se sintoniza en MaxBand
-//RESET = (frec[MaxBand] -> FM[MaxBand]),
+//RESET = (frec[MAX_BAND] -> FM[MAX_BAND]),
 
 //Boton de Scan
 //Cuando se presiona, busca estaciones bajando hasta la frecuencia MinBand
-SCAN[f:MinBand..MaxBand] = (frec[f] -> if f>MinBand then
-                                           (yes_station -> FM[f] 
-                                           |no_station -> SCAN[f-1]) 
-                                       else
-                                           ({yes_station, no_station} -> FM[f])
-                           ).
+SCAN[f:MIN_BAND..MAX_BAND] = (frec[f] -> if f>MIN_BAND then
+                                             (yes_station -> FM[f] 
+                                             |no_station -> SCAN[f-1]) 
+                                         else
+                                             ({yes_station, no_station} -> FM[f])
+                             ).
 
 //Otra forma de hacer el Scan
-//SCAN[f:MinBand..MaxBand] = (frec[f] -> (when(f>MinBand) yes_station -> FM[f] 
-//                                       |when(f>MinBand) no_station -> SCAN[f-1]
-//                                       |when(f==MinBand) {yes_station, no_station} -> FM[f])
-//                           ).
+//SCAN[f:MIN_BAND..MAX_BAND] = (frec[f] -> (when(f>MIN_BAND) yes_station -> FM[f] 
+//                                         |when(f>MIN_BAND) no_station -> SCAN[f-1]
+//                                         |when(f==MIN_BAND) {yes_station, no_station} -> FM[f])
+//                             ).
