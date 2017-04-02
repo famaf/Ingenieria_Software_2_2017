@@ -26,15 +26,17 @@ PRESS = (input_press -> press -> release_press -> PRESS).
 DRILL = (input_drill -> drill -> release_drill -> DRILL).
 
 //Prensa y luego Taladro
-PRESS_TO_DRILL = (input_press -> press -> input_drill_other  -> drill -> PRESS_TO_DRILL).
+//PRESS_TO_DRILL = (input_press -> press -> input_drill_2  -> drill -> release_drill -> PRESS_TO_DRILL).
 
 //Taladro y luego Prensa
-DRILL_TO_PRESS = (input_drill -> drill -> input_press_other  -> press -> DRILL_TO_PRESS).
+//DRILL_TO_PRESS = (input_drill -> drill -> input_press_2  -> press -> release_press -> DRILL_TO_PRESS).
 
 //Fabrica
-||FACTORY = (CONVEYOR_BELT || arm_press_drill:ARM || PRESS || DRILL || PRESS_TO_DRILL || DRILL_TO_PRESS || arm_release:ARM)/{//Renombre de las entradas de la Prensa y el Taladro
+||FACTORY = (CONVEYOR_BELT || arm_press_drill:ARM || PRESS || DRILL || arm_release:ARM)/{//Renombre de las entradas de la Prensa y el Taladro
                                                                                                                              drop_to_press/input_press,
                                                                                                                              drop_to_drill/input_drill,
+  //                                                                                                                           drop_to_press_2/input_press_2,
+//                                                                                                                             drop_to_drill_2/input_drill_2,
                                                                                                                              //Renombre de la obtencion del brazo que agarra
                                                                                                                              get[x:TYPE_OBJ]/arm_press_drill.pick_up[x],
                                                                                                                              //Renombre del Brazo que suelta las piezas a la Prensa y el Taladro
