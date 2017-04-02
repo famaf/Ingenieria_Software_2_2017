@@ -1,39 +1,17 @@
-const N = 2 //Cantidad de personas
-range R = 0..N
+//Prensa
+PRESS = (input_press -> press -> release_press -> PRESS).
 
-//Puerta del Este
-EAST = (unlock_east -> EAST_DOOR),
-EAST_DOOR = (arrive -> EAST_DOOR
-            |lock_east -> EAST
-            ).
+//Taladro
+DRILL = (input_drill -> drill -> release_drill -> DRILL).
 
+//Prensa y luego Taladro
+//||PRESS_TO_DRILL =(PRESS || DRILL)/{input_press_drill/{input_press, input_drill}, release_press_drill/{release_press, release_drill}}.
 
-//Puerta del OESTE
-WEST = (unlock_west -> WEST_DOOR),
-WEST_DOOR = (exit -> WEST_DOOR
-            |lock_west -> WEST
-            ).
+//Prensa y luego Taladro
+PRESS_TO_DRILL = (input_press -> press -> input_drill  -> drill -> PRESS_TO_DRILL).
 
-//El Director abre y cierra el Museo
-DIRECTOR = (open_museum -> close_museum -> DIRECTOR).
+//Taladro y luego Prensa
+DRILL_TO_PRESS = (input_drill -> drill -> input_press  -> press -> DRILL_TO_PRESS).
 
-//Controlador de las puertas
-CONTROL = (open_museum -> OPEN_DOORS
-          |close_museum -> CLOSE_DOORS
-          ),
-OPEN_DOORS = (unlock_east -> unlock_west -> CONTROL),
-CLOSE_DOORS = (lock_east -> lock_west -> CONTROL).
-
-//Gente
-PEOPLE = PEOPLE[0],
-PEOPLE[p:R] = (when(p<N) arrive -> PEOPLE[p+1]
-              |when(p>0) exit -> PEOPLE[p-1]
-              |close_museum -> lock_east -> PEOPLE[0]
-              ).
-
-
-
-
-
-//Museo
-||MUSEUM = (EAST || DIRECTOR || CONTROL || PEOPLE || WEST).
+//Taladro y luego Prensa
+//||DRILL_TO_PRESS =(DRILL || PRESS).

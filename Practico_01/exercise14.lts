@@ -1,23 +1,51 @@
-//Cinta Transportadora
-CONVEYER_BELT = ({object_A, object_B, object_C, object_D} -> CONVEYER_BELT).
+set TYPE_OBJ = {a, b, c, d} //Tipos de objetos
+const MAX_OBJ = 4 //Cantidad de maxima de objetos 
 
-// Brazo Mecanico de seleccion
-ARM_PRESS_DRILL = (object_A -> press -> free_arm -> ARM_PRESS_DRILL
-                  |object_B -> drill -> free_arm -> ARM_PRESS_DRILL
-                  |object_C -> press -> drill -> free_arm -> ARM_PRESS_DRILL
-                  |object_D -> drill -> press -> free_arm -> ARM_PRESS_DRILL
-                  ).
+//Cinta Transportadora
+ONEBUFF=(put[x:TYPE_OBJ] -> get[x] -> ONEBUFF).
+||CONVEYOR_BELT(N=MAX_OBJ)=([1..N]:ONEBUFF)/{put/[1].put,
+                                             [i:2..N].put/[i-1].get,
+                                             get/[N].get}@{put,get}.
+
+//Brazo Mecanico
+ARM = (pick_up[x:TYPE_OBJ] -> drop[x] -> ARM).
+
+//Lo de arriba es equivalente a lo de abajo
+/*
+ARM = (pick_up[{a}] -> drop[{a}] -> ARM
+      |pick_up[{b}] -> drop[{b}] -> ARM
+      |pick_up[{c}] -> drop[{c}] -> ARM
+      |pick_up[{d}] -> drop[{d}] -> ARM
+      ).
+*/
 
 //Prensa
-PRESS = (press -> PRESS).
+PRESS = (input_press -> press -> release_press -> PRESS).
 
 //Taladro
-DRILL = (drill -> DRILL).
+DRILL = (input_drill -> drill -> release_drill -> DRILL).
 
-// Brazo Mecanico para la salida
-ARM_FREE = (press -> ARM_FREE
-           |drill -> ARM_FREE
-           ).
+//Prensa y luego Taladro
+PRESS_TO_DRILL = (input_press -> press -> input_drill_other  -> drill -> PRESS_TO_DRILL).
+
+//Taladro y luego Prensa
+DRILL_TO_PRESS = (input_drill -> drill -> input_press_other  -> press -> DRILL_TO_PRESS).
 
 //Fabrica
-||FACTORY = (CONVEYER_BELT || ARM_PRESS_DRILL || PRESS || DRILL || ARM_FREE).
+||FACTORY = (CONVEYOR_BELT || arm_press_drill:ARM || PRESS || DRILL || PRESS_TO_DRILL || DRILL_TO_PRESS || arm_release:ARM)/{//Renombre de las entradas de la Prensa y el Taladro
+                                                                                                                             drop_to_press/input_press,
+                                                                                                                             drop_to_drill/input_drill,
+                                                                                                                             //Renombre de la obtencion del brazo que agarra
+                                                                                                                             get[x:TYPE_OBJ]/arm_press_drill.pick_up[x],
+                                                                                                                             //Renombre del Brazo que suelta las piezas a la Prensa y el Taladro
+                                                                                                                             drop_to_press/arm_press_drill.drop.a,
+                                                                                                                             drop_to_drill/arm_press_drill.drop.b,
+                                                                                                                             drop_to_press/arm_press_drill.drop.c,
+                                                                                                                             drop_to_drill/arm_press_drill.drop.d,
+                                                                                                                             //Renombre del Brazo que levanta las piezas para la liberacion 
+                                                                                                                             release_press/arm_release.pick_up.a,
+                                                                                                                             release_drill/arm_release.pick_up.b,
+                                                                                                                             release_press/arm_release.pick_up.c,
+                                                                                                                             release_drill/arm_release.pick_up.d,
+                                                                                                                             //Renombre del Brazo que libera las piezas                                                                                     
+                                                                                                                             finish/arm_release.drop.TYPE_OBJ}.

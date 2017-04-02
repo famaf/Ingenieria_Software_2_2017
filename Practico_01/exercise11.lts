@@ -2,6 +2,7 @@ const N = 2 //Cantidad de personas
 range R = 0..N
 
 /*
+//VERSION 1
 CONTROL = (open_museum -> open_doors -> PEOPLE[0]),
 
 PEOPLE[p:R] = (when(p<N) arrive -> PEOPLE[p+1]
@@ -14,19 +15,22 @@ CLOSE_DOORS[p:R] = (when(p>0) leave -> CLOSE_DOORS[p-1]
                    ).
 */
 
+//VERSION 2
+//Puerta del Este
 EAST = (open_door -> EAST_ARRIVE),
 EAST_ARRIVE = (arrive -> EAST_ARRIVE
               |close_east_door -> EAST
 		      ).
-
+//Puerta del Oeste
 WEST = (open_door -> WEST_LEAVE),
 WEST_LEAVE = (leave -> WEST_LEAVE
              |close_west_door -> WEST
 		     ).
 
+//Director del Museo
 DIRECTOR = (open_museum -> close_museum -> DIRECTOR).
 
-
+//Control de ingreso y salida de personas
 CONTROL = (open_museum -> open_door -> PEOPLE[0]),
 PEOPLE[p:R] = (when(p<N) arrive -> PEOPLE[p+1]
               |when(p>0) leave -> PEOPLE[p-1]
@@ -36,5 +40,5 @@ CLOSE_DOORS[p:R] = (when(p>0) leave -> CLOSE_DOORS[p-1]
                    |when(p==0) close_west_door -> CONTROL
                    ).
 
-
+//Museo
 ||MUSEUM = (EAST || WEST || DIRECTOR || CONTROL)/{open_doors/open_door}.

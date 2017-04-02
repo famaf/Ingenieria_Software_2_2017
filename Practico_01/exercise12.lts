@@ -1,35 +1,20 @@
-/*
+const MAX_OBJ = 3 //Cantidad de maxima de objetos 
+range R = 0..MAX_OBJ //Rango de objetos
+
 //Cinta Transportadora
-CONVEYER_BELT = (next -> object_A -> CONVEYER_BELT).
-
-// Brazo Mecanico para el prensado
-ARM_PRESS = (object_A -> press -> free_arm -> ARM_PRESS).
-
-//Prensa
-PRESS = (press -> PRESS).
-
-// Brazo Mecanico para la salida
-ARM_FREE = (press -> ARM_FREE). // DUDA ACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-
-//Fabrica
-||FACTORY = (CONVEYER_BELT || ARM_PRESS || PRESS || ARM_FREE).
-*/
-
-const N = 3
-range R = 0..N
-
-CINTA = BUFFER[0],
-BUFFER[i:R] = (when(i<N) put -> BUFFER[i+1]
+CONVEYOR_BELT = BUFFER[0],
+BUFFER[i:R] = (when(i<MAX_OBJ) put -> BUFFER[i+1]
               |when(i>0) get -> BUFFER[i-1]
               ).
 
-//BRAZO_PRESS = (get -> release -> press -> BRAZO_PRESS).
-BRAZO_PRESS = (get -> drop_to_press -> BRAZO_PRESS).
+//Brazo Mecanico
+ARM = (pick_up -> drop -> ARM).
 
-PRESS = (drop_to_press -> press -> finish_press -> BRAZO_PRESS).
+//Prensa
+PRESS = (input_press -> press -> release_press -> PRESS).
 
-
-BRAZO_RELEASE = (finish_press -> release_brazo -> BRAZO_RELEASE).
-
-
-||FACTORY = (CINTA || BRAZO_PRESS || PRESS || BRAZO_RELEASE).
+//Fabrica
+||FACTORY = (CONVEYOR_BELT || arm_press:ARM || PRESS/{drop_to_press/input_press} || arm_release:ARM)/{get/arm_press.pick_up,
+                                                                                                      drop_to_press/arm_press.drop,
+                                                                                                      release_press/arm_release.pick_up,
+                                                                                                      finished/arm_release.drop}.
