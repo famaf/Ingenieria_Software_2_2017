@@ -1,0 +1,15 @@
+const N = 2 //Lectores
+const M = 2 //Escritores
+
+const Max = 3
+SEMAPHORE(N=0) = SEMA[N],
+SEMA[v:0..MAX] = (up -> SEMA[v+1]
+                 |when(v>0) down -> SEMA[v-1]
+                 ),
+SEMA[MAX+1] = ERROR.
+
+READER = (read -> READER).
+
+WRITER = (read -> WRITER
+         |write -> WRITER
+         ).

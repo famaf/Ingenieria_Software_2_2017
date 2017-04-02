@@ -1,0 +1,33 @@
+const N = 3
+const M = 2
+const K = 2
+
+// Model the file with a modified semaphore
+FILE(N=K) = SEMA[N],
+SEMA[v:0..K] = (up->SEMA[v+1]
+			   |when(v>0) down->SEMA[v-1]
+			   |when(v==N) acquire->release->SEMA[N]).
+
+// Reader can read
+READER = (down->read->up->READER).
+
+// Writer can both read and write
+WRITER = (down->read->up->WRITER
+		 |acquire->write->release->WRITER).
+
+||READERS = ([1..N]:READER).
+
+||SYSREAD = (READERS||FILE)/{[1..N].down/down,
+								 [1..N].up/up}.
+
+||WRITERS = ([N+1..M+N]:WRITER).
+
+||SYSWRITE = (WRITERS||FILE)/{[N+1..N+M].down/down,
+							  [N+1..N+M].up/up,
+							  [N+1..N+M].acquire/acquire,
+							  [N+1..N+M].release/release}.
+
+||SYSTEM = (FILE||READERS||WRITERS)/{[1..N+M].down/down,
+	    							 [1..N+M].up/up,
+							         [N+1..N+M].acquire/acquire,
+							         [N+1..N+M].release/release}.
