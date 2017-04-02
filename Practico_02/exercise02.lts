@@ -1,15 +1,19 @@
 const N = 2 //Lectores
 const M = 2 //Escritores
+const K = 1 //Procesos
 
-const Max = 3
-SEMAPHORE(N=0) = SEMA[N],
-SEMA[v:0..MAX] = (up -> SEMA[v+1]
-                 |when(v>0) down -> SEMA[v-1]
-                 ),
-SEMA[MAX+1] = ERROR.
+RESOURCE(N=K) = SEMA[N],
+SEMA[v:0..K] = (up -> SEMA[v+1]
+               |when(v>0) down -> SEMA[v-1]
+               ),
+SEMA[K+1] = ERROR.
 
-READER = (read -> READER).
+//Los Lectores solo pueden Leer
+READER = (down -> read -> up -> READER).
 
-WRITER = (read -> WRITER
+//Los Escritores solo pueden Leer y Escribir
+WRITER = (down -> read -> up -> WRITER
          |write -> WRITER
          ).
+
+||READERS = ([1..N]:READER).
