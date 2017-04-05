@@ -1,0 +1,13 @@
+const N = 2 //Asientos en el Teatro
+
+//Empleado: Muestra los asientos y checkea si estan libres
+EMPLOYEE = (show -> seat[i:1..N] -> check[i] -> EMPLOYEE).
+
+//Cliente: Elije el asiento
+CLIENT = (seat[i:1..N] -> CLIENT).
+
+//Asientos: checkea los asientos
+//SEAT
+
+//Teatro
+//||THEATER = (EMPLOYEE || CLIENT || SEAT).

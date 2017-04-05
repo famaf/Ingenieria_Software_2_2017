@@ -1,0 +1,17 @@
+const M = 3 //Maximo de mensajes
+
+//Productor
+PRODUCER = (produce -> PRODUCER).
+
+//Consumidor
+CONSUMER = (consume -> CONSUMER).
+
+//Buffer
+BUFFER = BUFFER[0],
+BUFFER[i:0..M] = (when(i<M) produce -> BUFFER[i+1]
+                 |when(i>0) consume -> BUFFER[i-1]
+                 ).
+
+//Protocolo de comunicacion
+||PROTOCOL = (PRODUCER || BUFFER || CONSUMER).
+
