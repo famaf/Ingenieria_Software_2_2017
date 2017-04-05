@@ -14,7 +14,9 @@ ARM = (pick_up -> drop -> ARM).
 PRESS = (input_press -> press -> release_press -> PRESS)/{drop_to_press/input_press}.
 
 //Fabrica
-||FACTORY = (CONVEYOR_BELT || arm_press:ARM || PRESS|| arm_release:ARM)/{get/arm_press.pick_up,
-                                                                         drop_to_press/arm_press.drop,
-                                                                         release_press/arm_release.pick_up,
-                                                                         finished/arm_release.drop}.
+||FACTORY = (CONVEYOR_BELT || arm_begin:ARM || PRESS|| arm_end:ARM)/{//Renombre del Brazo del INICIO
+                                                                     get/arm_begin.pick_up,
+                                                                     drop_to_press/arm_begin.drop,
+                                                                     //Renombre del Brazo del FINAL
+                                                                     release_press/arm_end.pick_up,
+                                                                     finished/arm_end.drop}.

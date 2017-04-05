@@ -1,5 +1,21 @@
-/*
 // Maquina de Bebidas VERSION 1
+DRINKS = MONEY[0], //Empezamos con 0c en la Maquina
+
+//Maneja el dinero de la Maquina
+MONEY[d:0..30] = (when(d<15) coin[5] -> MONEY[d+5] //Se ingreso Moneda de 5c
+                 |when(d<15) coin[10] -> MONEY[d+10] //Se ingreso Moneda de 10c
+                 |when(d<15) coin[20] -> MONEY[d+20] //Se ingreso Moneda de 20c
+                 |when(d>=15) pepsi[15] -> CHANGE[d-15] //Se alcanzo los 15c => Damos la Pepsi y el vuelto de ser necesario
+                 ),
+//Maneja el vuelto que tiene que dar la Maquina
+CHANGE[v:0..15] = (when(v==0) vuelto[0] -> MONEY[0] //No hay vuelto
+                  |when(v==5) vuelto[5] -> CHANGE[0] //Vuelto de 5c
+                  |when(v==10) vuelto[10] -> CHANGE[0] //Vuelto de 10c
+                  |when(v==15) vuelto[10] -> CHANGE[5] //Vuelto de 15c pero doy 10c y despues los 5c
+                  ).
+
+/*
+// Maquina de Bebidas VERSION 2
 DRINKS = MONEY[0],
 
 //MONEY es la cantidad de dinero que tiene la maquina
@@ -20,22 +36,6 @@ CHANGE[v:0..19] = (when(v==0) vuelto[0] -> MONEY[0] //No hay vuelto
                   |when(v==15) vuelto[10] -> CHANGE[5] //Vuelto de 15c pero doy 10c y despues los 5c
                   ).
 */
-
-// Maquina de Bebidas VERSION 2
-DRINKS = MONEY[0], //Empezamos con 0c en la Maquina
-
-//Maneja el dinero de la Maquina
-MONEY[d:0..30] = (when(d<15) coin[5] -> MONEY[d+5] //Se ingreso Moneda de 5c
-                 |when(d<15) coin[10] -> MONEY[d+10] //Se ingreso Moneda de 10c
-                 |when(d<15) coin[20] -> MONEY[d+20] //Se ingreso Moneda de 20c
-                 |when(d>=15) pepsi[15] -> CHANGE[d-15] //Se alcanzo los 15c => Damos la Pepsi y el vuelto de ser necesario
-                 ),
-//Maneja el vuelto que tiene que dar la Maquina
-CHANGE[v:0..15] = (when(v==0) vuelto[0] -> MONEY[0] //No hay vuelto
-                  |when(v==5) vuelto[5] -> CHANGE[0] //Vuelto de 5c
-                  |when(v==10) vuelto[10] -> CHANGE[0] //Vuelto de 10c
-                  |when(v==15) vuelto[10] -> CHANGE[5] //Vuelto de 15c pero doy 10c y despues los 5c
-                  ).
 
 
 /*
