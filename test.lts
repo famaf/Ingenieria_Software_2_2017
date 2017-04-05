@@ -1,0 +1,17 @@
+P = (a[1] -> (a[2] -> (a[3] -> b[3] -> P
+                      |b[2] -> P
+                      )
+             |b[1] -> P
+             )
+    ).
+
+
+//||PROGRESO = (P)<<{a[1], a[2], a[3]}.
+
+
+property SQLP = (llueve -> LLOVIENDO
+                |no_llueve -> SQLP
+                ),
+LLOVIENDO = (llueve -> LLOVIENDO
+            |no_llueve -> SQLP
+            ).
