@@ -1,8 +1,10 @@
 ONESHOT = (once -> STOP).
 
+
 SWITCH = OFF,
 OFF = (on -> ON),
 ON = (off -> OFF).
+
 
 DRINKS = (red -> coffee -> DRINKS
          |blue -> tea -> DRINKS

@@ -18,8 +18,8 @@ FM[f:MIN_BAND..MAX_BAND] = (off -> RADIO_FM
 //Boton de Scan
 //Cuando se presiona, busca estaciones bajando hasta la frecuencia MinBand
 SCAN[f:MIN_BAND..MAX_BAND] = (frec[f] -> if f>MIN_BAND then
-                                             (yes_station -> FM[f] 
-                                             |no_station -> SCAN[f-1]) 
+                                             (yes_station -> FM[f]
+                                             |no_station -> SCAN[f-1])
                                          else
                                              ({yes_station, no_station} -> FM[f])
                              ).

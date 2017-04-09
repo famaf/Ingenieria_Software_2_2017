@@ -20,12 +20,12 @@ CLOSE_DOORS[p:R] = (when(p>0) leave -> CLOSE_DOORS[p-1]
 EAST = (open_door -> EAST_ARRIVE),
 EAST_ARRIVE = (arrive -> EAST_ARRIVE
               |close_east_door -> EAST
-		      ).
+              ).
 //Puerta del Oeste
 WEST = (open_door -> WEST_LEAVE),
 WEST_LEAVE = (leave -> WEST_LEAVE
              |close_west_door -> WEST
-		     ).
+             ).
 
 //Director del Museo
 DIRECTOR = (open_museum -> close_museum -> DIRECTOR).
