@@ -1,9 +1,32 @@
-const N = 2 //Asientos en el Teatro
+const N = 3 //Cantidad de asientos
+range Asientos = 1..N //Rango de asientos
+const Libre = 0
+const Ocupado = 1
+range Estado = Libre..Ocupado //Posibles estado de los asientos (0:ocupado, 1:libre)
+set Terminales = {a, b} //Terminales disponibles
 
-EMPLEADO = (mostrar -> butaca[i:1..N] -> check[i] -> EMPLEADO).
+//Asiento
+ASIENTO = ASIENTO[Libre], //El asiento empieza libre = !ocupado
+ASIENTO[estado:Estado] = (consulta[estado] -> ASIENTO[estado] //Me mantengo en el mismo estado
+                         |when(!estado) ocupar -> ASIENTO[Ocupado] //Si esta libre ocuapar asiento
+                         ).
 
-CLIENTE = (butaca[i:1..N] -> libre[i] -> CLIENTE).
+//Todos los asientos
+||ASIENTOS = (asiento[Asientos]:ASIENTO).
 
-BUTACA[i:1..N] = (libre[i] -> BUTACA[i]).
+//Lock para la exclusion mutua
+LOCK = (acquire -> release -> LOCK).
 
-||TEATRO = (EMPLEADO || CLIENTE || BUTACA).
+//Terminal de consulta
+TERMINAL = (asiento[s:Asientos] -> acquire -> asiento[s].consulta[estado:Estado]
+                                           -> if (!estado) then
+                                                  (asiento[s].ocupar -> release -> TERMINAL)
+                                              else
+                                                  (asiento[s].ocupado -> release -> TERMINAL)
+           ).
+
+//Terminal de consulta con explusion mutua
+||TERMINAL_LOCK = (LOCK || TERMINAL).
+
+//Reservas para el Teatro
+||TEATRO = (ter[Terminales]:TERMINAL || ter[Terminales]::ASIENTOS || ter[Terminales]::TERMINAL_LOCK).
