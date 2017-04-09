@@ -1,0 +1,41 @@
+const C = 3 //Cantidad de clients
+
+//Clientes
+CLIENTE = (pedido -> (aceptado -> CLIENTE
+                     |rechazado -> CLIENTE)
+          ).
+
+//Editorial: Nerd's Press
+EDITORIAL = (check_libro -> si_libro -> EDITORIAL
+            |check_libro -> no_libro -> EDITORIAL
+            ).
+
+//Tarjeta de Credito: Plasti-Card
+TARJETA_CREDITO = (check_fondos -> si_dinero -> TARJETA_CREDITO
+                  |check_fondos -> no_dinero -> TARJETA_CREDITO
+                  ).
+/*
+EMPRESA = (pedido -> check_libro -> (no_libro -> rechazado -> EMPRESA
+                                    |si_libro -> check_fondos -> (si_dinero -> aceptado -> EMPRESA
+                                                                 |no_dinero -> rechazado -> EMPRESA)
+                                    )
+          ).
+*/
+
+//Empresa de venta de libros
+EMPRESA = (pedido -> CHECK_BOOK),
+CHECK_BOOK = (check_libro -> (no_libro -> rechazado -> EMPRESA
+                             |si_libro -> CHECK_MONEY)
+             ),
+CHECK_MONEY = (check_fondos -> (si_dinero -> aceptado -> EMPRESA
+                               |no_dinero -> rechazado -> EMPRESA)
+              ).
+
+//Clientes de la empresa
+||CLIENTES = (cliente[1..C]:CLIENTE).
+
+
+//Sistema de venta libros por internet
+||SISTEMA = (CLIENTES || EMPRESA || EDITORIAL ||TARJETA_CREDITO)/{cliente[1..C].pedido/pedido,
+                                                                  cliente[1..C].aceptado/aceptado,
+                                                                  cliente[1..C].rechazado/rechazado}.
