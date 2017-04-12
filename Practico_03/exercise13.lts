@@ -1,0 +1,14 @@
+const MAX = 10
+range PERSONAS = 0..MAX
+
+//Ascensor: Se puede entrar o salir
+ASCENSOR = (enter -> ASCENSOR
+           |exit -> ASCENSOR
+           ).
+
+property CONTROL = CONTROL[0],
+CONTROL[p:PERSONAS] = (when(p < MAX) enter -> CONTROL[p+1]
+                      |when(p > 0) exit -> CONTROL[p-1]
+                      ).
+
+||SISTEMA = (ASCENSOR || CONTROL).
