@@ -1,0 +1,4 @@
+property PS = (a -> (b -> PS
+                    |a -> PS)
+              |b -> a -> PS
+              ).

@@ -1,0 +1,8 @@
+property COUNTRYSIDE = ([n:1..2].enter -> [n].get_berries -> [n].exit -> COUNTRYSIDE).
+
+NEIGHBOR = (raise -> see -> (check[0] -> enter -> get_berries -> exit -> lower -> NEIGHBOR
+                            check[1] -> lower -> NEIGHBOR)
+           ).
+
+//FLAG = FLAG[0],
+//FLAG[i:0..1] = ().

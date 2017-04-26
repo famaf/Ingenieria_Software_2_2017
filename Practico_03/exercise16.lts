@@ -1,0 +1,36 @@
+const INICIAL = 7
+
+LABERINTO = POS[INICIAL],
+
+POS[0] = (north -> STOP
+         |east -> POS[1] 
+         ),
+
+POS[1] = (west -> POS[0]
+         |south -> POS[4]
+         |east -> POS[2]
+         ),
+
+POS[2] = (west -> POS[1]
+         |south -> POS[5]
+         ),
+
+POS[3] = (east -> POS[4]
+         |south -> POS[6]
+         ),
+
+POS[4] = (west -> POS[3]
+         |north -> POS[1]
+         ),
+
+POS[5] = (north -> POS[2]
+         |south -> POS[8]
+         ),
+
+POS[6] = (north -> POS[3]),
+
+POS[7] = (east -> POS[8]),
+
+POS[8] = (west -> POS[7]
+         |north -> POS[5]
+         ).
