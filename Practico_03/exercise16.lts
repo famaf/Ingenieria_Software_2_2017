@@ -1,6 +1,6 @@
-const INICIAL = 7
+const INICIAL = 6
 
-LABERINTO = POS[INICIAL],
+LABERINTO = ([i:0..7] -> POS[INICIAL]),
 
 POS[0] = (north -> STOP
          |east -> POS[1] 
