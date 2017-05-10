@@ -1,0 +1,22 @@
+// Maquina de Bebidas VERSION 3 (HARCODE)
+DRINKS = MONEY[0],
+
+MONEY[0] = (coin[5] -> MONEY[5]
+           |coin[10] -> MONEY[10]
+           |coin[20] -> CHANGE[5]
+           ),
+
+MONEY[5] = (coin[5] -> MONEY[10]
+           |coin[10] -> CHANGE[0]
+           |coin[20] -> CHANGE[10]
+           ),
+
+MONEY[10] = (coin[5] -> CHANGE[0]
+            |coin[10] -> CHANGE[5]
+            |coin[20] -> CHANGE[15]
+            ),
+
+CHANGE[0] = (pepsi -> DRINKS),
+CHANGE[5] = (pepsi -> vuelto[5] -> DRINKS),
+CHANGE[10] = (pepsi -> vuelto[10] -> DRINKS),
+CHANGE[15] = (pepsi -> vuelto[10] -> vuelto[5] -> DRINKS).

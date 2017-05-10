@@ -1,0 +1,17 @@
+const S = 3 //Cantidad de Salvajes
+const M = 2 //Porciones
+
+//Salvaje: solo come
+SAVAGE = (eat -> SAVAGE).
+
+//COCINERO: Solo llena la olla
+CHEF = (fill -> CHEF).
+
+//OLLA
+POT(N=M) = RATION[N],
+RATION[p:0..M] = (when(p>0) eat -> RATION[p-1] //Miestras haya comida comen
+                 |when(p==0) fill -> RATION[M] //Si no hay comida lleno la olla
+                 ).
+
+//Los Salvajes Cenando
+||TRIBE = (salvaje[1..S]:SAVAGE || CHEF || POT)/{salvaje[1..S].eat/eat}.

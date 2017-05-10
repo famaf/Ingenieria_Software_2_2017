@@ -1,0 +1,38 @@
+Ejercicio 14: (Hint: The following FSP can be used to model the flags.)
+const True = 1
+const False = 0
+range Bool = False..True
+set BoolActions = {setTrue, setFalse, [False], [True]}
+
+BOOLVAR = VAL[False],
+VAL[v:Bool] = ( setTrue -> VAL[True]
+              | setFalse -> VAL[False]
+              | [v] -> VAL[v]
+              ).
+||FLAGS = (flag1:BOOLVAR || flag2:BOOLVAR).
+
+Ejercicio 14:
+For instance, neighbor n1 behaves as shown below, and neighbor n2 behaves
+symmetrically.
+
+while (true) {
+    flag1 = true;
+    turn = 2;
+    while (flag2 and turn==2) {};
+    enterField;
+    pickBerries;
+    flag1 = false;
+}
+
+Model Peterson’s Algorithm for the two neighbors. Check that it does indeed
+avoid deadlock and satisfy the mutual exclusion (safety) and berry-picking
+(progress) properties.
+(Hint: The following FSP can be used to model the turn indicator.)
+
+set CardActions = {set1, set2, [1], [2]}
+
+CARDVAR = VAL[1],
+VAL[i:Card] = ( set1 -> VAL[1]
+              | set2 -> VAL[2]
+              | [i] -> VAL[i]
+              ).

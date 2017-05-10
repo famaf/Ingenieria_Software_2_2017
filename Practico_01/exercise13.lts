@@ -24,10 +24,7 @@ PRESS = (input_press -> press -> release_press -> PRESS)/{drop_to_press/input_pr
 DRILL = (input_drill -> drill -> release_drill -> DRILL)/{drop_to_drill/input_drill}.
 
 //Fabrica
-||FACTORY = (CONVEYOR_BELT || arm_begin:ARM || PRESS || DRILL || arm_end:ARM)/{//Renombre de las entradas de la Prensa y el Taladro
-                                                                               //drop_to_press/input_press,
-                                                                               //drop_to_drill/input_drill,
-                                                                               //Renombre del Brazo del INICIO
+||FACTORY = (CONVEYOR_BELT || arm_begin:ARM || PRESS || DRILL || arm_end:ARM)/{//Renombre del Brazo del INICIO
                                                                                get[x:TYPE_OBJ]/arm_begin.pick_up[x],
                                                                                //Acciones sobre el objeto A
                                                                                drop_to_press/arm_begin.drop.a,

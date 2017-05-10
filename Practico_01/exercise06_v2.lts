@@ -1,0 +1,10 @@
+//Version 2
+range R = 0..9 // Posibles niveles de agua
+
+//Sensor de nivel de agua del tanque
+SENSOR(N=5) = SENSOR[N],
+SENSOR[i:R] = (level[l:R] -> SENSOR[l] //El nivel del agua va aumentando y luego pasa por el Sensor
+              |when(i<2) bajo -> SENSOR[i] //Vemos si el valor del Sensor es Bajo
+              |when(i>=2 && i<=8) normal -> SENSOR[i] //Vemos si el valor del Sensor es Normal
+              |when(i>8) alto -> SENSOR[i] //Vemos si el valor del Sensor es Alto
+              ).

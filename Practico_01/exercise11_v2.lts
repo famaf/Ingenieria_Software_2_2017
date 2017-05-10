@@ -1,21 +1,7 @@
+//VERSION 2
 const N = 2 //Cantidad de personas
 range R = 0..N
 
-/*
-//VERSION 1
-CONTROL = (open_museum -> open_doors -> PEOPLE[0]),
-
-PEOPLE[p:R] = (when(p<N) arrive -> PEOPLE[p+1]
-              |when(p>0) leave -> PEOPLE[p-1]
-			  |close_museum -> close_door_east -> CLOSE_DOORS[p]
-              ),
-
-CLOSE_DOORS[p:R] = (when(p>0) leave -> CLOSE_DOORS[p-1]
-                   |when(p==0) close_door_west -> CONTROL
-                   ).
-*/
-
-//VERSION 2
 //Puerta del Este
 EAST = (open_door -> EAST_ARRIVE),
 EAST_ARRIVE = (arrive -> EAST_ARRIVE

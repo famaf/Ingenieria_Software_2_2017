@@ -8,7 +8,7 @@ set Terminales = {a, b} //Terminales disponibles
 //Asiento
 ASIENTO = ASIENTO[Libre], //El asiento empieza libre = !ocupado
 ASIENTO[estado:Estado] = (consulta[estado] -> ASIENTO[estado] //Me mantengo en el mismo estado
-                         |when(!estado) ocupar -> ASIENTO[Ocupado] //Si esta libre ocuapar asiento
+                         |when(!estado) sentarse -> ASIENTO[Ocupado] //Si esta libre ocuapar asiento
                          ).
 
 //Todos los asientos
@@ -20,7 +20,7 @@ LOCK = (acquire -> release -> LOCK).
 //Terminal de consulta
 TERMINAL = (asiento[s:Asientos] -> acquire -> asiento[s].consulta[estado:Estado]
                                            -> if (!estado) then
-                                                  (asiento[s].ocupar -> release -> TERMINAL)
+                                                  (asiento[s].sentarse -> release -> TERMINAL)
                                               else
                                                   (asiento[s].ocupado -> release -> TERMINAL)
            ).

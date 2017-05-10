@@ -1,17 +1,18 @@
-const M = 3 //Maximo de mensajes
+range M = 0..2 // 3 productores y 3 consumidores
+set S = {[M], [M][M], [M][M][M]} // Maximo de 3 mensajes
 
-//Productor
-PRODUCER = (produce -> PRODUCER).
+//Estado vacío, solo esta permitido enviar
+PORT = (send[x:M] -> PORT[x]),
 
-//Consumidor
-CONSUMER = (consume -> CONSUMER).
+//1 mensaje en cola al puerto
+PORT[h:M] = (send[x:M] -> PORT[x][h]
+            |receive[h] -> PORT
+            ),
 
-//Buffer
-BUFFER = BUFFER[0],
-BUFFER[i:0..M] = (when(i<M) produce -> BUFFER[i+1]
-                 |when(i>0) consume -> BUFFER[i-1]
-                 ).
+//2 mensaje en cola al puerto
+PORT[t:M][h:M] = (send[x:M] -> PORT[x][t][h]
+                 |receive[h] -> PORT[t]
+                 ),
 
-//Protocolo de comunicacion
-||PROTOCOL = (PRODUCER || BUFFER || CONSUMER).
-
+//3 mensaje en cola al puerto, solo esta permitido recibir
+PORT[x:S][t:M][h:M] = (receive[h] -> PORT[x][t]).

@@ -17,28 +17,3 @@ LLOVIENDO = (llueve -> LLOVIENDO
             |no_llueve -> SQLP
             ).
 */
-
-range T = 0..10
-const NCLIENTS = 3
-
-CLIENT = (request -> (accept -> CLIENT
-				     |reject -> CLIENT)
-         ).
-
-COMPANY = (request -> check_stock -> (no_stock -> reject -> COMPANY
-					                 |stock -> check_cc -> (enougth_money -> accept -> COMPANY
-								                           |not_enougth_money -> reject-> COMPANY)
-		                 			  )
-	      ).
-
-PUBLISHER = (check_stock -> no_stock -> PUBLISHER
-			|check_stock -> stock -> PUBLISHER).
-
-CC = (check_cc -> enougth_money -> CC
-	 |check_cc -> not_enougth_money -> CC).
-
-
-||CLIENTS = (c[1..NCLIENTS]:CLIENT).
-||SYS = (CLIENTS||COMPANY||PUBLISHER||CC)/{c[1..NCLIENTS].request/request,
-									       c[1..NCLIENTS].accept/accept,
-                                           c[1..NCLIENTS].reject/reject}.

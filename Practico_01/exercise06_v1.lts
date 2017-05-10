@@ -1,0 +1,5 @@
+//VERSION 1
+SENSOR = (level[i:1..9] -> (when(i<2) bajo -> SENSOR
+                           |when(i>=2 && i<=8) normal -> SENSOR
+                           |when(i>8) alto -> SENSOR)
+         ).

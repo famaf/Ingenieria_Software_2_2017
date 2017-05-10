@@ -17,27 +17,10 @@ WRITER = (down -> read -> up -> WRITER //Leer
          |acquire -> write -> release -> WRITER //Escribir
          ).
 
-//Todos los Lectores
-||READERS = (reader[1..N]:READER).
-
-//Todos los Escritores
-||WRITERS = (writer[N+1..N+M]:WRITER).
-/*
-//Solo Lectores
-||ONLY_READERS = (READERS || RESOURCE)/{[1..N].up/up,
-                                        [1..N].down/down}.
-
-//Solo Escritores
-||ONLY_WRITERS = (WRITERS || RESOURCE)/{[N+1..N+M].up/up,
-                                        [N+1..N+M].down/down,
-                                        [N+1..N+M].lock/lock,
-                                        [N+1..N+M].unlock/unlock}.
-*/
-
 //Biblioteca
-||LIBRARY = (RESOURCE || READERS || WRITERS)/{reader[1..N].up/up,
-                                              reader[1..N].down/down,
-                                              writer[N+1..N+M].up/up,
-                                              writer[N+1..N+M].down/down,
-                                              writer[N+1..N+M].acquire/acquire,
-                                              writer[N+1..N+M].release/release}.
+||LIBRARY = (RESOURCE || reader[1..N]:READER || writer[N+1..N+M]:WRITER)/{reader[1..N].down/down,
+                                                                          reader[1..N].up/up,
+                                                                          writer[N+1..N+M].down/down,
+                                                                          writer[N+1..N+M].up/up,
+                                                                          writer[N+1..N+M].acquire/acquire,
+                                                                          writer[N+1..N+M].release/release}.

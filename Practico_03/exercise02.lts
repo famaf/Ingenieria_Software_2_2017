@@ -1,0 +1,22 @@
+/*
+The resources in this system are the forks shared between the
+philosophers. We model a fork in the same way that we modeled the
+scanner and printer resources in the previous section:
+*/
+
+FORK = (get -> put -> FORK).
+
+/*
+To use a fork, a philosopher must first pick up (get) that fork and when finished with the
+fork, the philosopher puts it down (put). Each philosopher is modeled by the process:
+*/
+const N = 5 // Cantidad de filofos
+
+PHIL = (sitdown -> right.get -> left.get -> eat -> left.put -> right.put -> arise -> PHIL).
+
+BUTLER = BUTLER[1],
+BUTLER[f:1..N] = (when(f < 5) sitdown -> BUTLER[f+1]
+                 |when(f > 0) arise -> BUTLER[f-1]
+                 )
+
+// FALTA

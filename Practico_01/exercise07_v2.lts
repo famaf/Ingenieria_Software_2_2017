@@ -1,0 +1,20 @@
+// Maquina de Bebidas VERSION 2
+DRINKS = MONEY[0],
+
+//MONEY es la cantidad de dinero que tiene la maquina
+//Vamos aceptando monedas hasta llegar a 15c
+MONEY[d:0..14] = (coin[5] -> MONEY[d+5]
+                 |coin[10] -> MONEY[d+10]
+                 |coin[20] -> MONEY[d+20]
+                 ),
+//Cuando llegamos o nos pasamos de los 15c entregamos
+//la Coca-Cola y el vuelto si es necesario
+MONEY[d:15..34] = (pepsi[15] -> CHANGE[d-15]),
+
+//Es el vuelto que se tiene que entregar pueden ser
+//monedas de 5c, 10c, 20c (Este ultimo caso no se da)
+CHANGE[v:0..19] = (when(v==0) vuelto[0] -> MONEY[0] //No hay vuelto
+                  |when(v==5) vuelto[5] -> CHANGE[0] //Vuelto de 5c
+                  |when(v==10) vuelto[10] -> CHANGE[0] //Vuelto de 10c
+                  |when(v==15) vuelto[10] -> CHANGE[5] //Vuelto de 15c pero doy 10c y despues los 5c
+                  ).
