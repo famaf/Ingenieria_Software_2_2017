@@ -2,9 +2,10 @@ const MAX = 10
 range PERSONAS = 0..MAX
 
 //Ascensor: Se puede entrar o salir
-ASCENSOR = (enter -> ASCENSOR
-           |exit -> ASCENSOR
-           ).
+ASCENSOR = ASCENSOR[0],
+ASCENSOR[p:PERSONAS] = (when(p < MAX) enter -> ASCENSOR[p+1]
+                       |when(p > 0) exit -> ASCENSOR[p-1]
+                       ).
 
 property CONTROL = CONTROL[0],
 CONTROL[p:PERSONAS] = (when(p < MAX) enter -> CONTROL[p+1]
