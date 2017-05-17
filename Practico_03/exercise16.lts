@@ -1,9 +1,9 @@
 const INICIAL = 6
 
-LABERINTO = ([i:0..7] -> POS[INICIAL]),
+LABERINTO = (enter[INICIAL] -> POS[INICIAL]),
 
-POS[0] = (north -> STOP
-         |east -> POS[1] 
+POS[0] = (north -> SALIDA
+         |east -> POS[1]
          ),
 
 POS[1] = (west -> POS[0]
@@ -33,4 +33,6 @@ POS[7] = (east -> POS[8]),
 
 POS[8] = (west -> POS[7]
          |north -> POS[5]
-         ).
+         ),
+
+SALIDA = (exit[-1] -> STOP).

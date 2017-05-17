@@ -18,9 +18,12 @@ WRITER = (down -> read -> up -> WRITER //Leer
          ).
 
 //Biblioteca
-||LIBRARY = (RESOURCE || reader[1..N]:READER || writer[N+1..N+M]:WRITER)/{reader[1..N].down/down,
-                                                                          reader[1..N].up/up,
-                                                                          writer[N+1..N+M].down/down,
-                                                                          writer[N+1..N+M].up/up,
-                                                                          writer[N+1..N+M].acquire/acquire,
-                                                                          writer[N+1..N+M].release/release}.
+||LIBRARY = (RESOURCE || reader[1..N]:READER || writer[N+1..N+M]:WRITER)
+/{
+    reader[1..N].down/down,
+    reader[1..N].up/up,
+    writer[N+1..N+M].down/down,
+    writer[N+1..N+M].up/up,
+    writer[N+1..N+M].acquire/acquire,
+    writer[N+1..N+M].release/release
+}.

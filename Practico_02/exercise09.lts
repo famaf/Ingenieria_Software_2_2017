@@ -25,6 +25,9 @@ CHECK_MONEY = (check_fondos -> (si_dinero -> aceptado -> EMPRESA
               ).
 
 //Sistema de venta libros por internet
-||SISTEMA = (cliente[1..N]:CLIENTE || EMPRESA || EDITORIAL ||TARJETA_CREDITO)/{cliente[1..N].pedido/pedido,
-                                                                               cliente[1..N].aceptado/aceptado,
-                                                                               cliente[1..N].rechazado/rechazado}.
+||SISTEMA = (cliente[1..N]:CLIENTE || EMPRESA || EDITORIAL || TARJETA_CREDITO)
+/{
+    cliente[1..N].pedido/pedido,
+    cliente[1..N].aceptado/aceptado,
+    cliente[1..N].rechazado/rechazado
+}.

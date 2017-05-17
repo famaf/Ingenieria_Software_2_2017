@@ -16,3 +16,15 @@ PORT[t:M][h:M] = (send[x:M] -> PORT[x][t][h]
 
 //3 mensaje en cola al puerto, solo esta permitido recibir
 PORT[x:S][t:M][h:M] = (receive[h] -> PORT[x][t]).
+
+
+
+/*
+const M = 3 //Maximo de mensajes
+
+//Protocolo de comunicacion
+CHANNEL = BUFFER[0],
+BUFFER[i:0..M] = (when(i<M) send -> BUFFER[i+1]
+                 |when(i>0) receive -> BUFFER[i-1]
+                 ).
+*/

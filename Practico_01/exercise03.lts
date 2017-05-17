@@ -2,6 +2,10 @@ MEETING = (hello -> converse -> goodbye -> STOP).
 
 JOB = (arrive -> work -> leave -> JOB).
 
+MOVE = (ahead -> (right -> MOVE
+                 |left -> STOP)
+       ).
+
 // FOURTICK = (tick -> tick -> tick -> tick -> STOP).
 FOURTICK(N=4) = STATE_TMP[0],
 STATE_TMP[i:0..N] = (when(i<N) tick -> STATE_TMP[i+1]).
@@ -9,6 +13,12 @@ STATE_TMP[i:0..N] = (when(i<N) tick -> STATE_TMP[i+1]).
 // ||F = FOURTICK() #Esto es para pasarle el parametro N
 // o
 // ||F = FOURTICK. #Esto es para NO pasarle el parametro N
+
+// ({a, b} -> P)
+// es equivalente a
+// (a -> P 
+// |b -> P
+// )
 
 GAME = ({one,two} -> WIN
        |three -> LOSE
