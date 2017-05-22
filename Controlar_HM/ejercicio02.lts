@@ -1,0 +1,16 @@
+//Concurrency: State Models and Java Programs (Jeff Magee and Jeff Kramer)
+
+PHIL = (sitdown -> right.get-> left.get -> eat -> left.put -> right.put -> arise -> PHIL).
+
+FORK = (get -> put -> FORK).
+
+BUTLER(S=4) = BUTLER[S],
+BUTLER[i:0..S] = (when(i>0) sitdown -> BUTLER[i-1]
+                 | when (i<S) arise -> BUTLER[i+1]
+                 ).
+
+||DINERS(N=5)= forall[i:0..N-1](phil[i]:PHIL || {phil[i].left, phil[((i-1)+N)%N].right}::FORK).
+
+||C(N=5) = (DINERS(N) || but:BUTLER(4))/{phil[i:0..N-1].sitdown/but.sitdown,
+                                         phil[i:0..N-1].arise/but.arise
+                                        }.

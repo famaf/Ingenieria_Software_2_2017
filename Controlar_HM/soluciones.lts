@@ -1,0 +1,266 @@
+13 P1-------------------------------
+set S = {objetoA,objetoB}
+
+
+CINTA = (ingreso[e:S] -> p_extraccion[e] -> liberacion[e] -> CINTA).
+
+BR_1 = ( levantar_de_cinta_A -> mover_a_prensa -> BR_1
+		| levantar_de_cinta_B -> mover_a_taladro -> BR_1
+	).
+
+PRENSA = (ready_p -> prensar -> liberar_prensado -> PRENSA).
+TALADRO = (ready_t -> taladrar -> liberar_taladrado -> TALADRO).
+
+BR_2 = (sacar_de_prensa -> producto_final_A  -> BR_2
+		|sacar_de_taladro -> producto_final_B  -> BR_2).
+
+
+||CELULA = (CINTA || BR_1 || BR_2 || PRENSA || TALADRO)
+	/{	levantar_de_cinta_A/liberacion.objetoA,
+		levantar_de_cinta_B/liberacion.objetoB,
+		mover_a_prensa/ready_p,
+		mover_a_taladro/ready_t,
+		sacar_de_prensa/liberar_prensado,
+		sacar_de_taladro/liberar_taladrado
+		}.
+
+//VERIFICAR PORQUE LIVENESS LO DETECTA CORRECTO Y NO DEBERIA
+progress ObjetoA = {ingreso.objetoA}
+progress ObjetoB = {ingreso.objetoB}
+
+14 P1----------------------------------------------
+const A = 3
+const B = 3
+const C = 3
+const D = 3
+
+range R = 0..A
+
+
+CINTA = CINTA[0][0][0][0],
+CINTA[a:R][b:R][c:R][d:R] = ( when(a < A ) ingreso_de_A -> CINTA[a+1][b][c][d]
+							| when(b < B ) ingreso_de_B -> CINTA[a][b+1][c][d]
+							| when(a < C ) ingreso_de_C -> CINTA[a][b][c+1][d]
+							| when(b < D ) ingreso_de_D -> CINTA[a][b][c][d+1]
+							| when (a > 0) p_extraccion_de_A -> liberacion_de_A -> CINTA[a-1][b][c][d]
+							| when (b > 0) p_extraccion_de_B -> liberacion_de_B -> CINTA[a][b-1][c][d]
+							| when (c > 0) p_extraccion_de_C -> liberacion_de_C -> CINTA[a][b][c-1][d]
+							| when (d > 0) p_extraccion_de_D -> liberacion_de_D -> CINTA[a][b][c][d-1]
+							).
+
+BR_1 = ( 	mover_a_prensa -> BR_1
+			|mover_a_taladro -> BR_1
+	).
+
+PRENSA = (ready_p -> prensar -> liberar_prensado -> PRENSA).
+TALADRO = (ready_t -> taladrar -> liberar_taladrado -> TALADRO).
+
+COMBO_1 = (ready_p -> ready_t -> COMBO_1). 
+COMBO_2 = (ready_t -> ready_p -> COMBO_2). 
+
+
+BR_2 = (sacar_de_prensa -> producto_final_A  -> BR_2
+		|sacar_de_taladro -> producto_final_B  -> BR_2).
+
+
+||CELULA = (CINTA || BR_1 || BR_2 || PRENSA || TALADRO)
+	/{	mover_a_prensa/liberacion_de_A,
+		mover_a_taladro/liberacion_de_B,
+		mover_a_prensa/ready_p,
+		mover_a_taladro/ready_t,
+		sacar_de_prensa/liberar_prensado,
+		sacar_de_taladro/liberar_taladrado
+		}.
+
+3 P2------------------------------------------
+const Num_butacas = 3 // Numero de asientos en el teatro
+const Num_terminales = 2 // Numero de terminales
+range B = 1..Num_butacas
+range T = 1..Num_terminales
+
+
+BUTACA = LIBRE,
+	LIBRE = ( libre -> LIBRE
+			| reservar -> OCUPADA),
+	OCUPADA = (ocupada -> OCUPADA).
+
+CENTRAL = ( consulta.recibir[b:B][t:T] -> ( butaca.[b].disponible[t] -> CENTRAL
+										| butaca.[b].reservada[t] -> CENTRAL
+										)
+			| reserva.recibir[b:B][t:T] -> ( reserva.ok[b][t] -> CENTRAL
+											| te_ganaron_de_mano[b][t] -> CENTRAL
+											) 
+		).
+
+
+TERMINAL = (elegir -> consulta.enviar[b:B] -> 	( consulta.ok[b] -> RESERVAR[b]
+												|  consulta.fail[b]-> TERMINAL
+												)
+			),
+	RESERVAR[b:B] =  (reserva.enviar[b] ->  ( reserva.ok -> TERMINAL
+											| reserva.fail -> TERMINAL
+											)
+					).
+
+
+||C = (butaca[B]:BUTACA || term[T]:TERMINAL || CENTRAL)
+	/{
+		term[t:T].consulta.enviar[b:B]/consulta.recibir[b][t],
+		
+		butaca.[b:B].disponible[t:T]/butaca[b].libre,
+		butaca.[b:B].reservada[t:T]/butaca[b].ocupada,
+		
+		butaca.[b:B].disponible[t:T]/term[t].consulta.ok[b],
+		butaca.[b:B].reservada[t:T]/term[t].consulta.fail[b],
+		
+		term[t:T].reserva.enviar[b:B]/reserva.recibir[b][t],
+		
+		reserva.ok[b:B][t:T]/butaca[b].reservar,
+		reserva.ok[b:B][t:T]/term[t].reserva.ok,
+		
+		te_ganaron_de_mano[b:B][t:T]/butaca[b].ocupada,
+		te_ganaron_de_mano[b:B][t:T]/term[t].reserva.fail
+	}.
+5 P2-----------------------------------------------------
+set S = {msj1,msj2,msj3,msj4,msj5,msj6,msj7}
+
+PRODUCTOR_2 = (enviar[m:S] -> PRODUCTOR_2).
+CONSUMIDOR_2 = (recibir[m:S] -> CONSUMIDOR_2).
+
+BUFF_2 = (poner[m:S] -> BUFF_2[m]),  
+	BUFF_2[m:S] =( poner[h:S] ->  BUFF_2[h][m]
+					| sacar[m] -> BUFF_2	 
+					),
+	BUFF_2[h:S][m:S] = ( poner[t:S] -> BUFF_2[t][h][m] 
+						|	sacar[m] -> BUFF_2[h]
+						), 
+	BUFF_2[t:S][h:S][m:S] = ( poner[f:S] -> BUFF_2[f][t][h][m] 
+							| sacar[m] -> BUFF_2[t][h]
+								), 
+	BUFF_2[f:S][t:S][h:S][m:S] = ( poner[x:S] -> BUFF_2[x][f][t][h][m] 
+							| sacar[m] -> BUFF_2[f][t][h]
+							),
+	BUFF_2[x:S][f:S][t:S][h:S][m:S] = (sacar[m] -> BUFF_2[x][f][t][h]
+		).
+
+||C2 = (PRODUCTOR_2 || CONSUMIDOR_2 || BUFF_2)
+			/{
+				enviar[m:S] / poner[m],
+				recibir[m:S] / sacar[m]
+			}.
+14 P3-------------------------------------
+const True = 1 const False = 0
+const Free = 1 const Busy = 0
+range Bool = False..True
+
+FLAG = FLAG[False],
+	FLAG[value:Bool] = ( [value] -> FLAG[value]
+						|  setTrue -> FLAG[True]
+						|  setFalse -> FLAG[False]
+						).
+
+||FLAGS = (f1:FLAG || f2:FLAG).
+
+
+NEIGHBOR = (upFlag -> (	lookNeighborFlagUp -> downFlag ->  NEIGHBOR
+						|lookNeighborFlagDown -> enterTheField -> pickBerries -> leavesTheField -> downFlag -> NEIGHBOR
+					)
+		).
+
+
+
+// Esto es necesario para garantizar que las acciones izar bandera y mirar la bandera del vecino
+// sea una accion atomica. De otra forma si los dos izan sus banderas, los dos veran las banderas
+// opuestas levantadas y los dos volveran a bajar las banderas (lo cual tampoco seria erroneo)
+
+
+ATOMIC_ACCION = (raisesFlag -> lookNeighborFlag -> ATOMIC_ACCION).
+
+||CAMPITO = (n1:NEIGHBOR || FLAGS || n2:NEIGHBOR || aa:ATOMIC_ACCION)
+	/{
+			n1.lookNeighborFlagUp/f2.[True],
+			n1.lookNeighborFlagDown/f2.[False],
+			n2.lookNeighborFlagUp/f1.[True],
+			n2.lookNeighborFlagDown/f1.[False],
+			n1.upFlag / f1.setTrue,
+			n2.upFlag / f2.setTrue,
+			n1.downFlag / f1.setFalse,
+			n2.downFlag / f2.setFalse,
+			//para hacer atomica la accion levantar bandera y mirar la del vecino
+			{n1,n2}.upFlag/aa.raisesFlag,
+			{n1,n2}.{lookNeighborFlagDown,lookNeighborFlagUp}/aa.lookNeighborFlag
+	}.
+
+
+property SAFE = ( n1.enterTheField -> n1.leavesTheField -> SAFE
+		|n2.enterTheField -> n2.leavesTheField -> SAFE
+		).
+
+||CAMPITO_SAFE = (CAMPITO || SAFE).
+
+
+progress N1 = {n1.enterTheField}
+progress N2 = {n2.enterTheField}
+
+
+15 P3------------------------------------- 
+const True = 1 const False = 0
+range Id = 1..2
+range Bool = False..True
+
+FLAG = FLAG[False],
+	FLAG[value:Bool] = ( [value] -> FLAG[value]
+						| setTrue -> FLAG[True]
+						| setFalse -> FLAG[False]
+						).
+
+TURN = TURN[1],
+	TURN[id:Id] = (	[id] -> TURN[id]
+					| set1 -> TURN[1]
+					| set2 -> TURN[2]
+					).
+
+
+
+NEIGHBOR = (upFlag -> setTurn -> LOOKFLAG),
+	LOOKFLAG = ( lookNeighborFlagUp -> LOOKTURN
+				| lookNeighborFlagDown -> ENTER
+				),
+	LOOKTURN = ( lookNeighborTurn -> LOOKFLAG
+				|lookMyTurn -> ENTER
+			),
+	ENTER = (enterTheField -> pickBerries -> leavesTheField -> downFlag -> NEIGHBOR).
+
+property SAFE = ( n1.enterTheField -> n1.leavesTheField -> SAFE
+		|n2.enterTheField -> n2.leavesTheField -> SAFE
+		).
+
+
+||FLAGS = (f1:FLAG || f2:FLAG).
+
+||CAMPITO = (n1:NEIGHBOR || FLAGS || n2:NEIGHBOR || t:TURN)
+	/{
+			n1.upFlag/f1.setTrue,
+			n2.upFlag/f2.setTrue,
+			n1.downFlag/f1.setFalse,
+			n2.downFlag/f2.setFalse,
+			n1.setTurn/t.set2,
+			n2.setTurn/t.set1,
+			n1.lookNeighborTurn/t.[2],
+			n2.lookNeighborTurn/t.[1],
+			n1.lookMyTurn/t.[1],
+			n2.lookMyTurn/t.[2],
+			n1.lookNeighborFlagUp/f2.[True],
+			n1.lookNeighborFlagDown/f2.[False],
+			n2.lookNeighborFlagUp/f1.[True],
+			n2.lookNeighborFlagDown/f1.[False]
+	}.
+
+
+||CAMPITO_SAFE = (CAMPITO || SAFE).
+
+
+progress N1 = {n1.enterTheField}
+progress N2 = {n2.enterTheField}
+
+//progress N2 = CAMPITO_SAFE << {n2.enterTheField}
