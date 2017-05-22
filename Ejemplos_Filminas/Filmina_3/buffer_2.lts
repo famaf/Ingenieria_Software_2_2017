@@ -1,0 +1,14 @@
+ONEBUFF = (put -> get -> ONEBUFF).
+
+||BUFFER(N=5) = ([1..N]:ONEBUFF)
+/{
+    put/[1].put,
+    [i:2..N].put/[i-1].get,
+    get/[N].get
+}@{put,get}.
+
+PRODUCER = (put -> PRODUCER).
+
+CONSUMER = (get -> CONSUMER).
+
+||BOUNDEDBUFFER = (PRODUCER || BUFFER(5) || CONSUMER).

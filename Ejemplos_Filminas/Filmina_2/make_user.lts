@@ -1,0 +1,4 @@
+MAKER = (make -> ready -> MAKER).
+USER = (ready -> use -> USER).
+
+||MAKER_USER = (MAKER || USER).

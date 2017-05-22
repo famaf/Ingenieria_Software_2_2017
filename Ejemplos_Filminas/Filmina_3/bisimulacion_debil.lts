@@ -1,0 +1,8 @@
+P = (necesita_recurso -> (recurso_local -> STOP
+                         |sync -> STOP
+                         )
+    ).
+
+Q = (sync -> recurso_externo -> STOP).
+
+||PQ = (P || Q)\{sync}.

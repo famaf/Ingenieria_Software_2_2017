@@ -1,0 +1,22 @@
+set M = {replyA, replyB}
+set S = {[M], [M][M]}
+
+PORT = (send[x:M] -> PORT[x]),
+PORT[v:M] = (send[x:M] -> PORT[x][v]
+            |receive[v] -> PORT
+            ),
+PORT[s:S][v:M] = (send[x:M] -> PORT[x][s][v]
+                 |receive[v] -> PORT[s]
+                 ).
+
+||ENTRY = PORT
+/{
+    call/send,
+    accept/receive
+}.
+
+CLIENT(CH=’reply) = (entry.call[CH] -> [CH] -> CLIENT).
+
+SERVER = (entry.accept[ch:M] -> [ch] -> SERVER).
+
+||EntryDemo = (CLIENT(’replyA) || CLIENT(’replyB) || entry:ENTRY || SERVER).

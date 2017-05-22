@@ -1,0 +1,8 @@
+BUFF_01 = (in[i:0..3] -> out[i] -> BUFF_01).
+
+// Equivalente
+BUFF_02 = (in[0] -> out[0] -> BUFF_02
+          |in[1] -> out[1] -> BUFF_02
+          |in[2] -> out[2] -> BUFF_02
+          |in[3] -> out[3] -> BUFF_02
+          ).

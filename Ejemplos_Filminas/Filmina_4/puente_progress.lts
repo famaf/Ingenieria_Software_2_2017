@@ -1,0 +1,5 @@
+progress BLUECROSS = {blue[ID].enter}
+
+progress REDCROSS = {red[ID].enter}
+
+||CongestedBridge = SingleLaneBridge >> {red[ID].exit, blue[ID].exit}.

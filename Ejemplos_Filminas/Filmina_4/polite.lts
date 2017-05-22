@@ -1,0 +1,7 @@
+PROC_POLITE = (knock -> (enter->PROC_POLITE
+                        |knock->ERROR
+                        )
+              |enter->ERROR
+              ).
+
+property POLITE = (knock -> enter -> POLITE).

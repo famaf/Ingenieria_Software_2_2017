@@ -1,0 +1,4 @@
+COIN = (toss -> (heads -> COIN
+                |tails -> COIN
+                )
+       ).

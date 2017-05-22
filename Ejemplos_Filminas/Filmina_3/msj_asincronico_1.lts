@@ -1,0 +1,15 @@
+range M = 0..9
+set S = {[M], [M][M]}
+
+//empty state, only send permitted
+PORT = (send[x:M] -> PORT[x]),
+
+//one message queued to port
+PORT[h:M] = (send[x:M] -> PORT[x][h]
+            |receive[h] -> PORT
+            ),
+
+//two or more messages queued to port
+PORT[t:S][h:M] = (send[x:M] -> PORT[x][t][h]
+                 |receive[h] -> PORT[t]
+                 ).
