@@ -18,11 +18,11 @@ pred NoDirigido[g: Grafo]{
 run NoDirigido for 4
 
 pred FConexo[g: Grafo]{
-	//g.aristas = g.nodos -> g.nodos
         ^(g.aristas) = g.nodos -> g.nodos
 }
 
 run FConexo for 4
+// run FConexo for 6 but 1 Grafo, exactly 3 Nodo
 
 pred Nodos3[g: Grafo]{
 	FConexo[g]
@@ -30,10 +30,12 @@ pred Nodos3[g: Grafo]{
 }
 
 pred Conexo[g: Grafo]{
-	
+	//g.aristas = g.nodos -> g.nodos
+       //g.aristas = ^(g.aristas)
+	g.aristas = 
 }
 
-run FConexo for 6 but 1 Grafo, exactly 3 Nodo
+run Conexo for 4 but 1 Grafo
 
 
 
