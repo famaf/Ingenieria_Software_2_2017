@@ -10,9 +10,10 @@ pred Reflexiva[r:R]{
 	(iden & (r.elem -> r.elem)) in r.rel
 }
 
-//pred NoReflexiva[r:R]{
-	//((iden & (r.elem -> r.elem)) & (r.rel)) in none // Como hago que sea no reflexiva
-//}
+pred AntiReflexiva[r:R]{
+	// Probar con not in, ie igual que Reflexivo pero con not in
+	(iden & (r.elem -> r.elem)) in ((r.elem -> r.elem) - r.rel) // Lo que esta a la der es el complemento de R
+}
 
 pred Antisimetrica[r:R]{
 	(r.rel) & (~(r.rel)) in (iden & (r.elem -> r.elem))
@@ -32,7 +33,7 @@ pred Preorden[r: R]{
 	Transitiva[r]
 }
 
-run Preorden for 5 but 1 R
+run Preorden for 4  but 1 R, exactly 4 Elem
 
 pred OrdenParcial[r: R]{
 	Reflexiva[r]
@@ -47,15 +48,23 @@ pred OrdenTotal[r: R]{
 	Antisimetrica[r]
 	Transitiva[r]
 	Total[r]
+	// Tambien se puede poner
+	// OrdenTotal[r]
+	// Transitiva[r]
 }
 
 run OrdenTotal for 5 but 1 R
 
-// Hacer no Reflexivo
 pred OrdenEstricto[r: R]{
-//	NoReflexiva[r])
+	AntiReflexiva[r]
 	Antisimetrica[r]
 	Transitiva[r]
 }
 
 run OrdenEstricto for 5 but 1 R
+
+pred PrimerElemento[r: R, x:Elem]{
+	all y:r.elem | x->y in r.rel
+}
+
+run PrimerElemento for 3 but 1 R

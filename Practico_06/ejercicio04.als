@@ -30,13 +30,23 @@ pred ConexoNodos3[g:Grafo]{
 	#g.nodos = 3
 }
 
-//pred Conexo[g: Grafo]{
-	//g.aristas = g.nodos -> g.nodos
-       //g.aristas = ^(g.aristas)
-	//g.aristas = 
-//}
+pred Conexo[g: Grafo]{
+	^(g.aristas + ~(g.aristas)) = g.nodos -> g.nodos
+}
 
-//run Conexo for 4 but 1 Grafo
+run Conexo for 4 but 1 Grafo
+
+pred SinIdentidad[g:Grafo]{
+	Conexo[g]
+	g.aristas = g.aristas - iden
+	#g.nodos =2
+}
+
+run SinIdentidad for 2 but 1 Grafo
+
+
+
+
 
 
 
