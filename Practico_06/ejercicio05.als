@@ -77,25 +77,34 @@ pred OrdenEstricto[r: Relacion]{
 
 run OrdenEstricto for 5 but 1 Relacion
 
-//  La Relacion tiene Primer Elemento
-//pred PrimerElemento[r: Relacion, x: Elem]{
-	//all y: r.elem | x->y in r.rel
-//}
-
-// PREGUNTAR SI ESTA BIEN ESCRITO ASI
-pred PrimerElemento[r: Relacion, x: Elem]{
-	some x: r.elem | all y: r.elem-x | x->y in r.rel
+//  La Relacion tiene Primer Elemento - VERSION 1
+pred PrimerElemento_v1[r: Relacion, x: Elem]{
+	OrdenParcial[r]
+	all y: r.elem | x->y in r.rel
 }
 
+//  La Relacion tiene Primer Elemento - VERSION 2
+pred PrimerElemento_v2[r: Relacion]{
+	OrdenParcial[r]
+	some x: r.elem | all y: r.elem | x->y in r.rel
+}
 
-run PrimerElemento for 3 but 1 Relacion
+run PrimerElemento_v1 for 3 but 1 Relacion
 
-//  La Relacion tiene Ultimo Elemento
-pred UltimoElemento[r: Relacion, x: Elem]{
+//  La Relacion tiene Ultimo Elemento - VERSION 1
+pred UltimoElemento_v1[r: Relacion, x: Elem]{
+	OrdenParcial[r]
 	all y: r.elem | y->x in r.rel
 }
 
-run UltimoElemento for 3 but 1 Relacion
+
+//  La Relacion tiene Ultimo Elemento - VERSION 1
+pred UltimoElemento_v2[r: Relacion]{
+	OrdenParcial[r]
+	some x: r.elem | all y: r.elem | y->x in r.rel
+}
+
+run UltimoElemento_v1 for 3 but 1 Relacion
 
 
 //========
@@ -104,35 +113,61 @@ run UltimoElemento for 3 but 1 Relacion
 
 // Todo Orden Parcial es Orden Total
 assert OrdenParcial_OrdenTotal {
-	all r: Relacion | OrdenParcial[r] implies OrdenTotal[r] // => es equivalente a implies
+	all r: Relacion |
+	OrdenParcial[r] implies
+	OrdenTotal[r]
 }
 
 check OrdenParcial_OrdenTotal
 
 // Todo Orden Parcial tiene Primer Elemento
 assert OrdenParcial_PrimerElemento {
-	all r: Relacion | OrdenParcial[r] implies (some x : r.elem | PrimerElemento[r, x])
+	//all r: Relacion | OrdenParcial[r] implies (some x: r.elem | PrimerElemento_v1[r, x])
+	//all r: Relacion | OrdenParcial[r] implies PrimerElemento_v2[r] // Usando VERSION 2
+	all r: Relacion |
+	some x: r.elem |
+	OrdenParcial[r] implies
+	PrimerElemento_v1[r, x]
 }
 
 check OrdenParcial_PrimerElemento
 
 // Todo Orden Total con Primer Elemento 'x' y ultimo elemento 'y' satisface x != y
-//assert OrdenTotal_PU {
-//	all r: Relacion | OrdenTotal[r] and (some x : r.elem | PrimerElemento[r, x]) and (some y : r.elem | UltimoElemento[r, y]) implies x != y
-//}
+assert OrdenTotal_PU {
+	all r: Relacion |
+	some x, y: r.elem |
+	(OrdenTotal[r]  and
+	PrimerElemento_v1[r, x] and
+	UltimoElemento_v1[r, y]) implies
+	(x != y)
+}
 
-//check OrdenTotal_PU
+check OrdenTotal_PU
 
 // La union de Ordenes Estrictos es un Orden Estricto
 assert Union_OrdenesEstrictos {
-	all r1, r2: Relacion | OrdenEstricto[r1]  and OrdenEstricto[r2] implies OrdenEstricto[r1 + r2] // => es equivalente a implies
+	all r1, r2: Relacion |
+    (OrdenEstricto[r1]  and
+    OrdenEstricto[r2]) implies
+
+    (all r3: Relacion |
+     (r3.elem = r1.elem + r2.elem and
+      r3.rel = r1.rel + r2.rel) implies
+      OrdenEstricto[r3])
 }
 
-check Union_OrdenesEstrictos
+check Union_OrdenesEstrictos for 2 but 3 Relacion
 
 // La composicion de Ordenes Estrictos es un Orden Estricto
-//assert Composicion_OrdenesEstrictos {
-//	all r1, r2: Relacion | OrdenEstricto[r1]  and OrdenEstricto[r2] => OrdenEstricto[(r1).(r2)] // => es equivalente a implies
-//}
+assert Composicion_OrdenesEstrictos {
+	all r1, r2: Relacion |
+	(OrdenEstricto[r1]  and
+     OrdenEstricto[r2]) implies
 
-//check Composicion_OrdenesEstrictos
+	(all r3: Relacion |
+	 (r3.elem = r1.elem + r2.elem and
+	  r3.rel = (r1.rel) . (r2.rel)) implies
+     OrdenEstricto[r3])
+}
+
+check Composicion_OrdenesEstrictos for 2 but 3 Relacion
