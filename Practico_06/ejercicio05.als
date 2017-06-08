@@ -83,13 +83,14 @@ pred PrimerElemento_v1[r: Relacion, x: Elem]{
 	all y: r.elem | x->y in r.rel
 }
 
+run PrimerElemento_v1 for 3 but 1 Relacion
+
 //  La Relacion tiene Primer Elemento - VERSION 2
 pred PrimerElemento_v2[r: Relacion]{
 	OrdenParcial[r]
 	some x: r.elem | all y: r.elem | x->y in r.rel
 }
 
-run PrimerElemento_v1 for 3 but 1 Relacion
 
 //  La Relacion tiene Ultimo Elemento - VERSION 1
 pred UltimoElemento_v1[r: Relacion, x: Elem]{
@@ -97,14 +98,13 @@ pred UltimoElemento_v1[r: Relacion, x: Elem]{
 	all y: r.elem | y->x in r.rel
 }
 
+run UltimoElemento_v1 for 3 but 1 Relacion
 
 //  La Relacion tiene Ultimo Elemento - VERSION 1
 pred UltimoElemento_v2[r: Relacion]{
 	OrdenParcial[r]
 	some x: r.elem | all y: r.elem | y->x in r.rel
 }
-
-run UltimoElemento_v1 for 3 but 1 Relacion
 
 
 //========
