@@ -118,8 +118,8 @@ assert OrdenParcial_OrdenTotal {
 	OrdenTotal[r]
 }
 
-check OrdenParcial_OrdenTotal
-
+check OrdenParcial_OrdenTotal for 2 but 1 Relacion
+ 
 // Todo Orden Parcial tiene Primer Elemento
 assert OrdenParcial_PrimerElemento {
 	//all r: Relacion | OrdenParcial[r] implies (some x: r.elem | PrimerElemento_v1[r, x])
