@@ -14,6 +14,7 @@ sig LTS{
 	//init.((^(Label)).(transiciones)) = estados
 }
 
+one sig Tau extends Label{} // Un solo Tau
 
 //========
 // Predicados
@@ -45,6 +46,30 @@ pred Bisimulacion[r: Estado -> Estado, t1: LTS]{
 run Bisimulacion
 
 
+pred Simulacion_Debil[r: Estado -> Estado, t1: LTS]{
+	r in (t1.estados->t1.estados)
+	~(r) . (t1.transiciones[Tau]) in *(t1.transiciones[Tau]) . ~(r)
+	~(r) . (t1.transiciones[Label]) in (*(t1.transiciones[Tau]) . (t1.transiciones[Label]) . *(t1.transiciones[Tau])) . ~(r)
+}
+
+run Simulacion_Debil
+
+pred Simulacion_Debil_Inversa[r: Estado -> Estado, t1: LTS]{
+	r in (t1.estados->t1.estados)
+	r . (t1.transiciones[Tau]) in *(t1.transiciones[Tau]) . r
+	r . (t1.transiciones[Label]) in (*(t1.transiciones[Tau]) . (t1.transiciones[Label]) . *(t1.transiciones[Tau])) . r
+}
+
+run Simulacion_Debil_Inversa
+
+pred Bisimulacion_Debil[r: Estado -> Estado, t1: LTS]{
+	r in (t1.estados->t1.estados)
+	Simulacion_Debil[r, t1]
+	Simulacion_Debil_Inversa[r, t1]
+}
+
+run Bisimulacion_Debil
+
 //========
 // Aserciones
 //========
@@ -53,4 +78,10 @@ assert Bisimulacion_Simulacion{
 	all lts: LTS | all r: (Estado->Estado) | Bisimulacion[r, lts] implies Simulacion[r, lts]
 }
 
+assert Bisimulacion_BisimulacionDebil{
+	all lts: LTS | all r: (Estado->Estado) | Bisimulacion[r, lts] implies Bisimulacion_Debil[r, lts]
+}
+
 check Bisimulacion_Simulacion
+
+check Bisimulacion_BisimulacionDebil

@@ -11,9 +11,11 @@ sig Catalogo{
 	interpretaciones: canciones -> interpretes
 }{
 	//Todas las canciones tienen algun interprete 
-	all s: canciones | some i: interpretes | (s->i) in interpretaciones
+	//all s: canciones | some i: interpretes | (s->i) in interpretaciones
+	canciones = interpretaciones . interpretes
 	//Todos los interpretes tiene registrada alguna cancion
-	all i: interpretes | some s: canciones | (s->i) in interpretaciones
+	//all i: interpretes | some s: canciones | (s->i) in interpretaciones
+	interpretes = canciones . interpretaciones
 }
 
 
