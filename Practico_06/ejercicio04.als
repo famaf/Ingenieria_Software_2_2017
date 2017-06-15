@@ -2,7 +2,7 @@ sig Nodo{}
 
 sig Grafo{
 	nodos: set Nodo,
-	aristas: nodos -> nodos
+	aristas: nodos->nodos
 }
 
 
@@ -14,7 +14,7 @@ sig Grafo{
 pred Aciclico[g: Grafo]{
 	no(iden & ^(g.aristas))
 	// Otra Forma
-	//(iden & ^(g.aristas)) = (none -> none)
+	//(iden & ^(g.aristas)) = (none->none)
 }
 
 run Aciclico for 4 but 1 Grafo
@@ -29,7 +29,7 @@ run NoDirigido for 4
 // El Grafo es Fuertemente
 pred FConexo[g: Grafo]{
 	// g.nodos -> g.nodos : Universo local
-        ^(g.aristas) = g.nodos -> g.nodos
+    ^(g.aristas) = (g.nodos->g.nodos)
 }
 
 run FConexo for 4 
@@ -43,7 +43,7 @@ pred FConexoNodos3[g: Grafo]{
 // El Grafo es Conexo
 pred Conexo[g: Grafo]{
 	// g.nodos -> g.nodos : Universo local
-	^(g.aristas + ~(g.aristas)) = g.nodos -> g.nodos
+	^(g.aristas + ~(g.aristas)) = (g.nodos->g.nodos)
 }
 
 run Conexo for 4 but 1 Grafo

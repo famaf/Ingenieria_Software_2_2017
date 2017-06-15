@@ -2,7 +2,7 @@ sig Elem{}
 
 sig Relacion{
 	elem: set Elem,
-	rel: elem -> elem
+	rel: elem->elem
 }
 
 
@@ -12,20 +12,20 @@ sig Relacion{
 
 //  La Relacion es Reflexiva
 pred Reflexiva[r: Relacion]{
-	// r.elem -> r.elem : Universo Local
-	(iden & (r.elem -> r.elem)) in r.rel
+	// r.elem->r.elem : Universo Local
+	(iden & (r.elem->r.elem)) in r.rel
 }
 
 //  La Relacion es Antireflexiva
 pred Antireflexiva[r: Relacion]{
-	// Complemento de r : (r.elem -> r.elem) - r.rel
+	// Complemento de r : (r.elem->r.elem) - r.rel
 	// Probar con not in, ie igual que Reflexivo pero con not in
-	(iden & (r.elem -> r.elem)) in ((r.elem -> r.elem) - r.rel) // Lo que esta a la der es el complemento de R
+	(iden & (r.elem->r.elem)) in ((r.elem->r.elem) - r.rel) // Lo que esta a la der es el complemento de R
 }
 
 //  La Relacion es Antisimetrica
 pred Antisimetrica[r: Relacion]{
-	(r.rel) & (~(r.rel)) in (iden & (r.elem -> r.elem))
+	(r.rel) & (~(r.rel)) in (iden & (r.elem->r.elem))
 }
 
 //  La Relacion es Transitiva
@@ -80,7 +80,7 @@ run OrdenEstricto for 5 but 1 Relacion
 //  La Relacion tiene Primer Elemento - VERSION 1
 pred PrimerElemento_v1[r: Relacion, x: Elem]{
 	OrdenParcial[r]
-	all y: r.elem | x->y in r.rel
+	all y: r.elem | (x->y) in r.rel
 }
 
 run PrimerElemento_v1 for 3 but 1 Relacion
@@ -88,14 +88,14 @@ run PrimerElemento_v1 for 3 but 1 Relacion
 //  La Relacion tiene Primer Elemento - VERSION 2
 pred PrimerElemento_v2[r: Relacion]{
 	OrdenParcial[r]
-	some x: r.elem | all y: r.elem | x->y in r.rel
+	some x: r.elem | all y: r.elem | (x->y) in r.rel
 }
 
 
 //  La Relacion tiene Ultimo Elemento - VERSION 1
 pred UltimoElemento_v1[r: Relacion, x: Elem]{
 	OrdenParcial[r]
-	all y: r.elem | y->x in r.rel
+	all y: r.elem | (y->x) in r.rel
 }
 
 run UltimoElemento_v1 for 3 but 1 Relacion
@@ -103,7 +103,7 @@ run UltimoElemento_v1 for 3 but 1 Relacion
 //  La Relacion tiene Ultimo Elemento - VERSION 1
 pred UltimoElemento_v2[r: Relacion]{
 	OrdenParcial[r]
-	some x: r.elem | all y: r.elem | y->x in r.rel
+	some x: r.elem | all y: r.elem | (y->x) in r.rel
 }
 
 
@@ -112,7 +112,7 @@ pred UltimoElemento_v2[r: Relacion]{
 //========
 
 // Todo Orden Parcial es Orden Total
-assert OrdenParcial_OrdenTotal {
+assert OrdenParcial_OrdenTotal{
 	all r: Relacion |
 	OrdenParcial[r] implies
 	OrdenTotal[r]
@@ -121,7 +121,7 @@ assert OrdenParcial_OrdenTotal {
 check OrdenParcial_OrdenTotal for 2 but 1 Relacion
  
 // Todo Orden Parcial tiene Primer Elemento
-assert OrdenParcial_PrimerElemento {
+assert OrdenParcial_PrimerElemento{
 	//all r: Relacion | OrdenParcial[r] implies (some x: r.elem | PrimerElemento_v1[r, x])
 	//all r: Relacion | OrdenParcial[r] implies PrimerElemento_v2[r] // Usando VERSION 2
 	all r: Relacion |
@@ -133,7 +133,7 @@ assert OrdenParcial_PrimerElemento {
 check OrdenParcial_PrimerElemento
 
 // Todo Orden Total con Primer Elemento 'x' y ultimo elemento 'y' satisface x != y
-assert OrdenTotal_PU {
+assert OrdenTotal_PU{
 	all r: Relacion |
 	some x, y: r.elem |
 	(OrdenTotal[r]  and
@@ -145,7 +145,7 @@ assert OrdenTotal_PU {
 check OrdenTotal_PU
 
 // La union de Ordenes Estrictos es un Orden Estricto
-assert Union_OrdenesEstrictos {
+assert Union_OrdenesEstrictos{
 	all r1, r2: Relacion |
     (OrdenEstricto[r1]  and
     OrdenEstricto[r2]) implies
@@ -159,7 +159,7 @@ assert Union_OrdenesEstrictos {
 check Union_OrdenesEstrictos for 2 but 3 Relacion
 
 // La composicion de Ordenes Estrictos es un Orden Estricto
-assert Composicion_OrdenesEstrictos {
+assert Composicion_OrdenesEstrictos{
 	all r1, r2: Relacion |
 	(OrdenEstricto[r1]  and
      OrdenEstricto[r2]) implies
