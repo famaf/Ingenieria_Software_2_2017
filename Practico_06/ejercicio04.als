@@ -28,7 +28,7 @@ run NoDirigido for 4
 
 // El Grafo es Fuertemente
 pred FConexo[g: Grafo]{
-	// g.nodos -> g.nodos : Universo local
+	// g.nodos->g.nodos : Universo local (Es equivalente a g.nodos X g.nodos)
     ^(g.aristas) = (g.nodos->g.nodos)
 }
 
@@ -42,7 +42,7 @@ pred FConexoNodos3[g: Grafo]{
 
 // El Grafo es Conexo
 pred Conexo[g: Grafo]{
-	// g.nodos -> g.nodos : Universo local
+	// g.nodos->g.nodos : Universo local (Es equivalente a g.nodos X g.nodos)
 	^(g.aristas + ~(g.aristas)) = (g.nodos->g.nodos)
 }
 
