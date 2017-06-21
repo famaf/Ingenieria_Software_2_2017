@@ -5,9 +5,8 @@ sig Label{}
 sig LTS{
 	estados: set Estado,
 	label: set Label,
-//	transiciones: Label->Estado->Estado
 	transiciones: label->estados->estados,
-	init: estados
+	init: one estados
 }{
     // Todos los estados de un LTL son alcanzables desde su estado inicial
 	init . (^(transiciones[Label])) = estados

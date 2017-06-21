@@ -12,7 +12,7 @@ sig Grafo{
 
 // El Grafo es Aciclico
 pred Aciclico[g: Grafo]{
-	no(iden & ^(g.aristas))
+	no(^(g.aristas) & iden)
 	// Otra Forma
 	//(iden & ^(g.aristas)) = (none->none)
 }
@@ -32,7 +32,7 @@ pred FConexo[g: Grafo]{
     ^(g.aristas) = (g.nodos->g.nodos)
 }
 
-run FConexo for 4 
+run FConexo for 4
 // Otra forma: run FConexo for 6 but 1 Grafo, exactly 3 Nodo
 
 pred FConexoNodos3[g: Grafo]{
